@@ -1,4 +1,4 @@
-export const Pie = () => {
+const Pie = () => {
 
     return (
         <div className="bg-white p-8">
@@ -7,3 +7,5 @@ export const Pie = () => {
     );
 
 }
+
+export default Pie;

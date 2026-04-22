@@ -1,4 +1,4 @@
-export const BarraNavegacion = () => {
+const BarraNavegacion = () => {
 
     return (
         <div className="bg-white p-8">
@@ -7,3 +7,5 @@ export const BarraNavegacion = () => {
     );
 
 }
+
+export default BarraNavegacion;
