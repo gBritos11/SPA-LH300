@@ -1,10 +1,10 @@
 
-{/* URL de MockAPI. Es el unico lugar de toda la app donde esta url existe. Si ma;ana cambia la modificamos aca y el resto de la app sigue funcionando si tocas nada mas */}
-const BASE_URL = `https://69e933af55d62f34797a51fc.mockapi.io/destino`;
+/** URL de MockAPI. Es el unico lugar de toda la app donde esta url existe. Si ma;ana cambia la modificamos aca y el resto de la app sigue funcionando si tocas nada mas */
+const BASE_URL = `https://69e933af55d62f34797a51fc.mockapi.io`;
 
-{/* Esta función NO se exporta — es de uso interno del archivo. */}
-{/* Su trabajo es hacer el fetch y manejar los errores comunes */}
-{/* para no repetir ese código en cada función pública. */}
+/** Esta función NO se exporta — es de uso interno del archivo. */
+/** Su trabajo es hacer el fetch y manejar los errores comunes */
+/** para no repetir ese código en cada función pública. */
 
 const fetchData = async (endpoint) => {
     const respuesta = await fetch(`${BASE_URL}${endpoint}`);
@@ -19,14 +19,14 @@ const fetchData = async (endpoint) => {
 }
 
 
-{/* Trae el listado completo de destinos */}
-{/* Uso: const destinos = await getDestinos() */}
+/** Trae el listado completo de destinos */
+/** Uso: const destinos = await getDestinos() */
 export const getDestinos = async () => {
-    return fetchData('/destinos');
+    return fetchData('/destino');
 }
 
-{/* Trae un destino específico por su ID */}
-{/* Uso: const destino = await getDestinoById(1) */}
+/** Trae un destino específico por su ID */
+/**  Uso: const destino = await getDestinoById(1) */
 export const getDestinoById = async (id) => {
-    return fetchData(`/destinos/:id`);
+    return fetchData(`/destino/${id}`);
 }
