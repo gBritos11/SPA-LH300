@@ -1,4 +1,4 @@
-export const Error = () => {
+const Error = () => {
 
     return (
         <div className="bg-white p-8">
@@ -7,3 +7,5 @@ export const Error = () => {
     );
 
 }
+
+export default Error;

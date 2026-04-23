@@ -1,4 +1,4 @@
-export const Detalles = () => {
+const Detalles = () => {
 
     return (
         <div className="bg-white p-8">
@@ -7,3 +7,5 @@ export const Detalles = () => {
     );
 
 }
+
+export default Detalles;

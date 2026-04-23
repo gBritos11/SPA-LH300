@@ -1,4 +1,4 @@
-export const Favoritos = () => {
+const Favoritos = () => {
 
     return (
         <div className="bg-white p-8">
@@ -7,3 +7,5 @@ export const Favoritos = () => {
     );
 
 }
+
+export default Favoritos;
