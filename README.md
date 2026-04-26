@@ -1,8 +1,8 @@
 # Programación Web Avanzada - SPA
 
 ## Integrantes
-- Britos Gabriel - FAI5629 - Project Manager
-- Veronica Lopez -  - Developer
+- Britos Gabriel - FAI 5629 - Project Manager
+- Veronica Lopez - FAI 5481 - Developer
 - Paula Viggiano -  - Developer
 
 ## Descripción del Proyecto

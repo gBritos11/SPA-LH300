@@ -26,7 +26,7 @@ const App = () => {
           Es la página de inicio. La palabra "index" es especial en
           react-router-dom, equivale a path="/" pero sin conflicto.
         */}
-
+        
         {/* RUTA DINÁMICA: el ":id" captura cualquier valor en esa posición.
             /producto/1   → id = "1"
             /producto/42  → id = "42"
