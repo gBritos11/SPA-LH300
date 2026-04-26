@@ -33,7 +33,7 @@ const App = () => {
             /producto/abc → id = "abc"
             El componente Detalles puede leer ese valor con useParams() 
         */}
-        <Route path="producto/:id" element={<Detalles/>} />
+        <Route path="detalle/:id" element={<Detalles/>} />
 
         {/* RUTA FIJA: solo se activa cuando la URL es "/favoritos" */}
         <Route path="favoritos" element={<Favoritos/>} />

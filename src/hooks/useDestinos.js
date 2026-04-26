@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDestinos } from "../servicios/Api"; {/* importamos del servicio */}
+import { getDestinos } from "../Servicios/api";
 
 const useDestinos = () => {
     const [destinos, setDestinos] = useState([]);
