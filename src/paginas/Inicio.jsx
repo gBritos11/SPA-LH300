@@ -3,7 +3,6 @@ import  useDestinos  from '../hooks/useDestinos';
 import  Tarjeta from '../componentes/Tarjeta/Tarjeta'
 import { useNavigate } from "react-router-dom";
 
-
 const Inicio = () => {
 
     const { destinos, loading, error } = useDestinos();

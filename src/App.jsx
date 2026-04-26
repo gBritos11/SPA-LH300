@@ -1,12 +1,11 @@
 import { Routes, Route } from "react-router-dom";
-
-import Pie from "./componentes/Pie";
 import BarraNavegacion from "./componentes/BarraNavegacion";
-
 import Inicio from './paginas/Inicio';
 import Detalles from "./paginas/Detalles";
 import Favoritos from "./paginas/Favoritos";
 import Error from "./paginas/Error";
+import Pie from "./componentes/Pie";
+
 
 const App = () => {
   return (
