@@ -3,7 +3,7 @@
 ## Integrantes
 - Britos Gabriel - FAI 5629 - Project Manager
 - Veronica Lopez - FAI 5481 - Developer
-- Paula Viggiano -  - Developer
+- Paula Viggiano - FAI 5516 - Developer
 
 ## Descripción del Proyecto
 Esta es una Single Page Application (SPA) desarrollada con React y Tailwind CSS para el dominio elegido. 
