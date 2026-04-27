@@ -1,23 +1,23 @@
-import { useEffect, useState } from 'react';
 import  useDestinos  from '../hooks/useDestinos';
-import  Tarjeta from '../componentes/Tarjeta/Tarjeta'
+import  Tarjeta from './../componentes/Tarjeta/Tarjeta'
 import { useNavigate } from "react-router-dom";
-import Spinner from '../componentes/Spinner/Spinner';
-import MensajeError from '../componentes/MensajeError/MensajeError';
-import MensajeVacio from '../componentes/MensajeVacio/MensajeVacio';
+import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
+import Boton from '../componentes/Boton/Boton';
 
 const Inicio = () => {
 
     const { destinos, loading, error } = useDestinos();
     const navigate = useNavigate();
 
-    //Estado 1 - Cargando
-    if (loading) return < Spinner />;
-    //Estado 2 - Error
-    if (error) return <MensajeError mensaje={error}/>
-    //Estado 3 - Vacio
-    if (destinos.length === 0) return < MensajeVacio />
-    //Estado 4 - Exito
+    if (loading) return <MensajesApp tipo="cargando" mensaje="Buscando destinos..." />;
+
+    if (error) return (
+        <MensajesApp tipo="error" detalle={error}>
+            <Boton onClick={() => window.location.reload()}>Reintentar</Boton>
+        </MensajesApp>
+    );
+
+    if (destinos.length === 0) return <MensajesApp tipo="vacio" mensaje="Parece que no hay viajes disponibles." />;
 
     return (
         <div className="p-8">
