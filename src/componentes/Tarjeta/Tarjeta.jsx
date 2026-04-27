@@ -1,9 +1,10 @@
 import Boton from '../Boton/Boton'; // Asegúrate de que la ruta sea la correcta
 import { ArrowRight } from 'lucide-react'; // Importamos un icono para darle nivel
+import estilo from './Tarjeta.module.css';
 
 const Tarjeta = ({ imagen, titulo, descripcion, presupuesto, action }) => { 
   return (
-    <div className="max-w-sm bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
+    <div className="max-w-sm bg-stone-100 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
       
       <div className="relative">
         <img 
@@ -14,7 +15,7 @@ const Tarjeta = ({ imagen, titulo, descripcion, presupuesto, action }) => {
       </div>
 
       <div className="p-4 flex flex-col flex-1 text-center">
-        <h2 className="text-lg font-semibold text-gray-800 line-clamp-1 h-7">
+        <h2 className="text-lg font-semibold text-gray-800 line-clamp-1 h-7 hover:text-xl transition-all duration-300">
           {titulo}
         </h2>
         
@@ -22,7 +23,7 @@ const Tarjeta = ({ imagen, titulo, descripcion, presupuesto, action }) => {
           {descripcion}
         </p>
         
-        <p className="text-blue-600 font-bold mt-4 text-xl">
+        <p className="text-600 font-bold mt-4 text-xl">
           $ {presupuesto}
         </p>
 

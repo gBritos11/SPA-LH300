@@ -1,11 +1,102 @@
+import { useParams, useNavigate  } from "react-router-dom";
+import useDestinoId from '../hooks/useDestinoId';
+import Boton from "../componentes/Boton/Boton";
+
 const Detalles = () => {
+  const { id } = useParams();
+  const { destino, cargando, error } = useDestinoId(id);
+  const navigate = useNavigate();
 
-    return (
-        <div className="bg-white p-8">
-            <h1 className="text-3xl font-bold">Página de detalles</h1>
+    if (cargando) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500"></div>
+          <p className="ml-4 text-orange-600">Cargando destino...</p>
         </div>
-    );
+      );
+    }
 
-}
+    if (error) {
+        return <p className="text-center mt-10 text-red-500">Error: {error}</p>;
+    }
+
+    if (!destino) {
+        return <p className="text-center mt-10">No se encontró el destino.</p>;
+    }
+
+  return (
+    
+    <div className="flex flex-col lg:flex-row gap-8 p-8">
+      <div className="lg:w-1/2">
+        <img
+          src={destino.imagen}
+          alt={destino.nombre}
+          className="w-full h-96 object-cover rounded-lg shadow-md"
+        />
+      </div>
+      
+      <div className="lg:w-1/2 flex flex-col justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">{destino.nombre}</h1>
+          <p className="mt-2 text-sm text-gray-500">
+            {destino.ubicacion}, {destino.pais}
+          </p>
+          <p className="mt-4 text-gray-700 leading-relaxed">{destino.descripcion}</p>
+
+          <p className="mt-4 text-xl font-semibold text-orange-600">
+            Presupuesto: ${destino.presupuesto}
+          </p>
+          <p className="mt-2 text-gray-500 italic">
+            Calificación: {destino.calificacion} 
+          </p>
+
+          <div className="mt-4">
+            <h2 className="font-semibold text-gray-700">Accesibilidad:</h2>
+            <ul className="flex gap-2 mt-2">
+              {destino.accesibilidad.map((medio, i) => (
+                <li
+                  key={i}
+                  className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm"
+                >
+                  {medio}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Alojamientos */}
+          <div className="mt-6">
+            <h2 className="font-semibold text-gray-700 mb-4">Alojamientos:</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {destino.alojamiento.map((a, i) => (
+                <div
+                  key={i}
+                  className="border rounded-lg p-4 shadow-sm bg-white"
+                >
+                  <p className="font-bold text-gray-800">{a.nombre} ({a.tipo})</p>
+                  <p className="text-sm text-gray-600">{a.ubicacion} – {a.reseña}</p>
+                  <p className="text-sm text-orange-600">Presupuesto: ${a.presupuesto}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-4">
+          <Boton variant="primary" onClick={() => alert("Destino destacado!")}>
+            Destacar
+          </Boton>
+          <Boton variant="secondary" onClick={() => alert("Destino puntuado!")}>
+            Puntuar
+          </Boton>
+          <Boton variant="outline" onClick={() => navigate("/")}>
+            Volver al inicio
+          </Boton>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Detalles;
