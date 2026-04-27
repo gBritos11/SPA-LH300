@@ -1,32 +1,32 @@
-import { useEffect, useState } from 'react';
 import  useDestinos  from '../hooks/useDestinos';
-import  Tarjeta from '../componentes/Tarjeta/Tarjeta'
+import  Tarjeta from './../componentes/Tarjeta/Tarjeta'
 import { useNavigate } from "react-router-dom";
+import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
+import Boton from '../componentes/Boton/Boton';
 
 const Inicio = () => {
 
     const { destinos, loading, error } = useDestinos();
     const navigate = useNavigate();
 
-    if (loading) {
-        return <p className="text-center mt-10">Cargando destinos...</p>;
-    }
+    if (loading) return <MensajesApp tipo="cargando" mensaje="Buscando destinos..." />;
 
-    if (error) {
-        return <p className="text-center mt-10 text-red-500">Error: {error}</p>;
-    }
+    if (error) return (
+        <MensajesApp tipo="error" detalle={error}>
+            <Boton onClick={() => window.location.reload()}>Reintentar</Boton>
+        </MensajesApp>
+    );
+
+    if (destinos.length === 0) return <MensajesApp tipo="vacio" mensaje="Parece que no hay viajes disponibles." />;
 
     return (
-        <div className="bg-beige p-8">
-            <h1 className="text-3xl font-bold">Página de Inicio</h1>
+        <div className="p-8">
+            <h1 className="text-3xl font-bold">Destinos</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {destinos.map((destino) => (
                     <Tarjeta
                         key={destino.id}
-                        imagen={destino.imagen}
-                        titulo={destino.nombre}
-                        descripcion={destino.descripcion}
-                        presupuesto={destino.presupuesto}
+                        destino={destino}
                         action={() => navigate(`/destino/${destino.id}`)}
                     />
                      ))}
