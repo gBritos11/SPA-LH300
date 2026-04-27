@@ -29,8 +29,8 @@ const Inicio = () => {
                         destino={destino}
                         action={() => navigate(`/destino/${destino.id}`)}
                     />
-                     ))}
-                </div>
+                ))}
+            </div>
         </div>   
     );
 }
