@@ -3,16 +3,12 @@ import { ArrowRight } from 'lucide-react'; // Importamos un icono para darle niv
 import estilo from './Tarjeta.module.css';
 
 const Tarjeta = ({ destino, action }) => { 
-  if (!destino) return null;
 
-  const { 
-    nombre = "Destino desconocido", 
-    presupuesto = 0, 
-    imagen = "", 
-    pais = "No especificado", 
-    descripcion = "Sin descripción disponible" 
-  } = destino;
-
+  const imagen = destino.imagen || 'https://picsum.photos/400/300';
+  const titulo = destino.titulo || 'Sin nombre';
+  const descripcion = destino.descripcion || 'Sin descripcion disponible';
+  const presupuesto = destino.presupuesto || 0;
+  
   return (
     <div className="max-w-sm bg-stone-100 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-comax-w-sm bg-stone-100 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
       

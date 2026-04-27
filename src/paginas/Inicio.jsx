@@ -21,12 +21,12 @@ const Inicio = () => {
 
     return (
         <div className="p-8">
-            <h1 className="text-3xl font-bold mb-8">Destinos</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                {destinos.map((destino) => (
+            <h1 className="text-3xl font-bold mb-8 text-slate-800">Destinos</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    {destinos.map((destino) => (
                     <Tarjeta
                         key={destino.id}
-                        destino={destino} 
+                        destino={destino}
                         action={() => navigate(`/destino/${destino.id}`)}
                     />
                 ))}
