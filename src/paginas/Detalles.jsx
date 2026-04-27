@@ -1,5 +1,6 @@
 import { useParams, useNavigate  } from "react-router-dom";
 import useDestinoId from '../hooks/useDestinoId';
+import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
 import Boton from "../componentes/Boton/Boton";
 
 const Detalles = () => {
@@ -7,22 +8,13 @@ const Detalles = () => {
   const { destino, cargando, error } = useDestinoId(id);
   const navigate = useNavigate();
 
-    if (cargando) {
-      return (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500"></div>
-          <p className="ml-4 text-orange-600">Cargando destino...</p>
-        </div>
-      );
-    }
+    if (cargando) return <MensajesApp tipo="cargando" mensaje="Buscando destinos..." />;
 
-    if (error) {
-        return <p className="text-center mt-10 text-red-500">Error: {error}</p>;
-    }
-
-    if (!destino) {
-        return <p className="text-center mt-10">No se encontró el destino.</p>;
-    }
+    if (error) return (
+        <MensajesApp tipo="error" detalle={error}>
+            <Boton onClick={() => window.location.reload()}>Reintentar</Boton>
+        </MensajesApp>
+    );
 
   return (
     
