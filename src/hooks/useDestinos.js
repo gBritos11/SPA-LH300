@@ -12,7 +12,6 @@ const useDestinos = () => {
                const datos = await getDestinos();
                setDestinos(datos);
                
-                console.log('Destinos recibidos:', datos)
             } catch (err) {
                 setError(err.message);
             } finally {
