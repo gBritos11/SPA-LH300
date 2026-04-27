@@ -16,12 +16,13 @@ const Boton = ({
   
   // Variantes de estilos (Colores y Bordes)
   const dicVariantes = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg",
-    secondary: "bg-slate-200 text-slate-800 hover:bg-slate-300",
-    outline: "border-2 border-blue-600 text-blue-600 hover:bg-blue-50",
-    ghost: "text-slate-600 hover:bg-slate-100",
-    danger: "bg-red-500 text-white hover:bg-red-600"
+    primary: "bg-orange-600 text-white hover:bg-orange-700 shadow-md hover:shadow-lg", // naranja intenso
+    secondary: "bg-amber-100 text-amber-900 hover:bg-amber-200", // beige cálido
+    outline: "border-2 border-orange-600 text-orange-600 hover:bg-orange-50", // borde naranja
+    ghost: "text-stone-700 hover:bg-stone-100", // gris-marrón suave
+    danger: "bg-red-500 text-white hover:bg-red-600" // puedes dejarlo igual o pasarlo a un marrón rojizo
   };
+
 
   // Estilo final
   const estilos = `${estilosBase} ${dicVariantes[variante] || dicVariantes.primary} ${className}`;

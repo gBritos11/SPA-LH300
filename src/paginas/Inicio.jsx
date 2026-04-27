@@ -27,7 +27,7 @@ const Inicio = () => {
                         titulo={destino.nombre}
                         descripcion={destino.descripcion}
                         presupuesto={destino.presupuesto}
-                        action={() => navigate(`/Detalle/${destino.id}`)}
+                        action={() => navigate(`/destino/${destino.id}`)}
                     />
                      ))}
                 </div>
