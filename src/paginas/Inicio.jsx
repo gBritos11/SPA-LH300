@@ -26,7 +26,10 @@ const Inicio = () => {
                     {destinos.map((destino) => (
                     <Tarjeta
                         key={destino.id}
-                        destino={destino}
+                        imagen={destino.imagen}
+                        titulo={destino.nombre}
+                        descripcion={destino.descripcion}
+                        presupuesto={destino.presupuesto}
                         action={() => navigate(`/destino/${destino.id}`)}
                     />
                      ))}
