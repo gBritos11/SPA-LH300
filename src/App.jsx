@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { BarraNavegacion } from "./componentes/BarraNavegacion/BarraNavegacion";
-import Pie from "./componentes/Pie";
+import Pie from "./componentes/Pie/Pie";
 import Inicio from './paginas/Inicio';
 import Detalles from "./paginas/Detalles";
 import Favoritos from "./paginas/Favoritos";
