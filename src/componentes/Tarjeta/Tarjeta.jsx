@@ -7,7 +7,7 @@ const Tarjeta = ({ destino, action }) => {
 
   const { 
     imagen = 'https://picsum.photos/400/300',
-    titulo = 'Sin nombre',
+    nombre = 'Sin nombre',
     descripcion = 'Sin descripción disponible',
     presupuesto = 0,
     pais = 'desconocido'
@@ -19,14 +19,14 @@ const Tarjeta = ({ destino, action }) => {
       <div className="relative">
         <img 
           src={imagen} 
-          alt={titulo} 
+          alt={nombre} 
           className="w-full h-48 object-cover" 
         />
       </div>
 
       <div className="p-4 flex flex-col flex-1 text-center">
         <h2 className="text-lg font-semibold text-gray-800 line-clamp-1 h-7 hover:text-xl transition-all duration-300">
-          {titulo}
+          {nombre}
         </h2>
         
         <p className="text-gray-600 mt-2 line-clamp-2 text-sm h-10">
