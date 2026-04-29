@@ -53,10 +53,7 @@ const Inicio = () => {
                     {destinosFiltrados.map((destino) => (
                     <Tarjeta
                         key={destino.id}
-                        imagen={destino.imagen}
-                        titulo={destino.nombre}
-                        descripcion={destino.descripcion}
-                        presupuesto={destino.presupuesto}
+                        destino={destino}
                         action={() => navigate(`/destino/${destino.id}`)}
                     />
                      ))}
