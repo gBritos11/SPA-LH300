@@ -12,7 +12,6 @@ const Inicio = () => {
 
     //Agrego el buscador
     const [filtro, setFiltro] = useState('');
-    console.log('filtro actual:', filtro);
 
     if (loading) return <MensajesApp tipo="cargando" mensaje="Buscando destinos..." />;
 

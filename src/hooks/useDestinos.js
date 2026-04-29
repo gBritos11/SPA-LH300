@@ -1,16 +1,30 @@
 import { useState, useEffect } from "react";
 import { getDestinos } from "../Servicios/api";
 
-const useDestinos = () => {
+const useDestinos = (filtro = '' ) => {
     const [destinos, setDestinos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [pagina, setPagina] = useState(1);
+    const [tieneMas, setTieneMas] = useState(true);
+
+    useEffect(() => {
+        setDestinos([]);
+        setPagina(1);
+        setTieneMas(true);
+    }, [filtro]);
 
     useEffect(() => {
         const fetchDestinos = async () => {
             try {
-               const datos = await getDestinos();
-               setDestinos(datos);
+                setLoading(true);
+               const datos = await getDestinos(filtro, pagina);
+
+               if(datos.length < 9){
+                setTieneMas(false);
+               }
+
+               setDestinos(prev => pagina === 1 ? datos : [...prev, ...datos]);
                
             } catch (err) {
                 setError(err.message);
@@ -20,9 +34,9 @@ const useDestinos = () => {
         }
 
         fetchDestinos()
-    }, []);
+    }, [filtro, pagina]);
 
-    return { destinos, loading, error};
+    return { destinos, loading, error, setPagina, tieneMas};
 }
 
 export default useDestinos;
