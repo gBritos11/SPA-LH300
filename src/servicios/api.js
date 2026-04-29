@@ -21,8 +21,13 @@ const fetchData = async (endpoint) => {
 
 {/* Trae el listado completo de destinos */}
 {/* Uso: const destinos = await getDestinos() */}
-export const getDestinos = async () => {
-    return fetchData('/destino');
+export const getDestinos = async (busqueda = '', pagina = 1, limite = 9) => {
+    let consulta = `?page=${pagina}&limit=${limite}`;
+    if (busqueda){
+        consulta += `$search=${busqueda}`;
+    }
+
+    return fetchData(`/destino${consulta}`);
 }
 
 {/* Trae un destino específico por su ID */}
