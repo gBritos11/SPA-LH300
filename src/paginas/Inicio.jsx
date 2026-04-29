@@ -17,7 +17,7 @@ const Inicio = () => {
         </MensajesApp>
     );
 
-    if (destinos.length === 0) return <MensajesApp tipo="vacio" mensaje="Parece que no hay viajes disponibles." />;
+    if (destinos.length === 0) return <MensajesApp tipo="vacio" mensaje="Parece que no hay destinos disponibles." />;
 
     return (
         <div className="p-8">
