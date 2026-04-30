@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { getDestinos } from "../Servicios/api";
 
+const LIMIT = 9;
+
 const useDestinos = (filtro = '' ) => {
     const [destinos, setDestinos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [cargandoMas, setCargandoMas] = useState(false);
     const [error, setError] = useState(null);
     const [pagina, setPagina] = useState(1);
     const [tieneMas, setTieneMas] = useState(true);
@@ -12,31 +15,43 @@ const useDestinos = (filtro = '' ) => {
         setDestinos([]);
         setPagina(1);
         setTieneMas(true);
+        setLoading(true);
+        setCargandoMas(false);
     }, [filtro]);
 
+    //Este useEffect hace el fetch cada vez que pagina o filtro cambian
     useEffect(() => {
         const fetchDestinos = async () => {
             try {
-                setLoading(true);
-               const datos = await getDestinos(filtro, pagina);
+                if (pagina === 1){
+                    setLoading(true);
+                    setCargandoMas(false);
+                } else {
+                    setCargandoMas(true);
+                    setLoading(false);
+                }
 
-               if(datos.length < 9){
-                setTieneMas(false);
-               }
+                const datos = await getDestinos(filtro, pagina, LIMIT);
+                if(datos.length < LIMIT){
+                    setTieneMas(false);
+                }
 
-               setDestinos(prev => pagina === 1 ? datos : [...prev, ...datos]);
+                setDestinos(prev => 
+                    pagina === 1 ? datos : [...prev, ...datos]
+                )
                
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
+                setCargandoMas(false);
             }
         }
 
         fetchDestinos()
     }, [filtro, pagina]);
 
-    return { destinos, loading, error, setPagina, tieneMas};
+    return { destinos, loading, cargandoMas, error, pagina, setPagina, tieneMas};
 }
 
 export default useDestinos;

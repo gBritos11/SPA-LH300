@@ -14,7 +14,6 @@ const fetchData = async (endpoint) => {
     if (!respuesta.ok) {
         throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
     }
-
     return respuesta.json();
 }
 
@@ -24,7 +23,7 @@ const fetchData = async (endpoint) => {
 export const getDestinos = async (busqueda = '', pagina = 1, limite = 9) => {
     let consulta = `?page=${pagina}&limit=${limite}`;
     if (busqueda){
-        consulta += `$search=${busqueda}`;
+        consulta += `&search=${busqueda}`;
     }
 
     return fetchData(`/destino${consulta}`);
