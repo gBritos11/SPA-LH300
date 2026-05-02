@@ -23,9 +23,23 @@ export const BarraNavegacion = () => {
 
                 <div className="flex items-center gap-8">
                     
-                    <NavLink to="/favoritos" className={estiloNavLink}>
-                        <Heart size={20} />
-                        <span className="hidden sm:inline">Favoritos</span>
+                    <NavLink 
+                        to="/favoritos" 
+                        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+                    >
+                        {({ isActive }) => (
+                        <>
+                            <Heart 
+                            size={20} 
+                            className={
+                                isActive 
+                                ? "fill-current text-naranja"   // corazón relleno cuando activo
+                                : "stroke-current text-naranja" // solo borde cuando inactivo
+                            }
+                            />
+                            <span className="hidden sm:inline">Favoritos</span>
+                        </>
+                        )}
                     </NavLink>
 
                 </div>
