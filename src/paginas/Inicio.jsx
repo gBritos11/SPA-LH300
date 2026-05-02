@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
-import  useDestinos  from '../hooks/useDestinos';
+import useDestinos  from '../hooks/useDestinos';
 import useScrollInfinito from '../hooks/useScrollInfinito';
-import  Tarjeta from './../componentes/Tarjeta/Tarjeta'
+import Tarjeta from './../componentes/Tarjeta/Tarjeta'
 import { useNavigate } from "react-router-dom";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp"
 import Boton from '../componentes/Boton/Boton';
