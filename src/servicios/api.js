@@ -16,7 +16,6 @@ const fetchData = async (endpoint) => {
     if (!respuesta.ok) {
         throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
     }
-
     return respuesta.json();
 }
 
