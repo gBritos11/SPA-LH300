@@ -1,12 +1,19 @@
+import { useState } from 'react';
 import { useParams, useNavigate  } from "react-router-dom";
 import useDestinoId from '../hooks/useDestinoId';
 import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
 import Boton from "../componentes/Boton/Boton";
+import { generarPDF } from '../servicios/pdfService';
 
 const Detalles = () => {
   const { id } = useParams();
   const { destino, cargando, error } = useDestinoId(id);
   const navigate = useNavigate();
+
+    {/* AGREGANDO ESTADO PARA CONTROLAR PDF  empieza en false*/}
+    const [generando, setGenerando] = useState(false);
+    {/* Estado para el feedback al usuario */}
+    const [estadoPDF, setEstadoPDF] = useState(null);
 
     if (cargando) return <MensajesApp tipo="cargando" mensaje="Buscando destinos..." />;
 
@@ -15,6 +22,38 @@ const Detalles = () => {
             <Boton onClick={() => window.location.reload()}>Reintentar</Boton>
         </MensajesApp>
     );
+
+    if (!destino) return null;
+
+    {/* Funcion que se ejecuta al hacer click en el boton */}
+    const handleDescargarPDF = async () => {
+      //Activamos el estado de generando -> el boton cambia su texto
+      setGenerando(true);
+
+      //Reseteamos el mensaje anterior por si el usuario intenta de nuevo
+      setEstadoPDF(null);
+
+      try {
+        {/* le pasamos el objeto destino completo */}
+        {/* El servicio sabe como armar el pdf */}
+        await generarPDF(destino);
+
+        {/* Si llegamos aca el pdf se genero sin errores */}
+        setEstadoPDF('exito');
+
+        {/* Ocultamos el msj de exito despues de 3 seg */}
+        setTimeout(() => setEstadoPDF(null), 3000);
+
+      } catch (err) {
+        {/* Si algo fallo (img no cargo, jsPDF tuvo un problema) */}
+        setEstadoPDF('error');
+        console.error('Error al generar PDF:', err);
+
+      } finally {
+        {/* Se ejecuta simpre, haya error o no. Vuelve habilitar el boton */}
+        setGenerando(false);
+      }
+    }
 
   return (
     
@@ -72,8 +111,25 @@ const Detalles = () => {
               ))}
             </div>
           </div>
-
         </div>
+
+        {/* Mostramos el msj justo antes del grupo de botones para que sea visible sin hacer scroll */}
+
+        {estadoPDF === 'exito' && (
+          <div className='mt-4 p-3 bg-green-50 border border-green-200 rounded-lg'>
+            <p className='text-green-600 text-sm font-medium text-center'>
+              PDF descargado correctamente
+            </p>
+          </div>
+        )}
+
+        {estadoPDF === 'error' && (
+          <MensajesApp 
+            tipo="error"  
+            mensaje="No se pudo generar el PDF. Intentá de nuevo"
+            
+          />
+        )}
 
         <div className="mt-6 flex flex-wrap gap-4">
           <Boton variant="primary" onClick={() => alert("Destino destacado!")}>
@@ -81,6 +137,15 @@ const Detalles = () => {
           </Boton>
           <Boton variant="secondary" onClick={() => alert("Destino puntuado!")}>
             Puntuar
+          </Boton>
+          {/* boton descarga pdf el texto cambia segun el estado */}
+          <Boton 
+            variant='outline'
+            onClick={handleDescargarPDF}
+            disabled={generando}
+            className={generando ? 'opacity-70 cursor-wait' : ''}
+          >
+            {generando ? 'Generando...' : 'Descargar PDF'}
           </Boton>
           <Boton variant="outline" onClick={() => navigate("/")}>
             Volver al inicio

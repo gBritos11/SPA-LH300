@@ -12,12 +12,20 @@ const useDestinos = (filtro = '' ) => {
     const [tieneMas, setTieneMas] = useState(true);
 
     useEffect(() => {
-        setDestinos([]);
-        setPagina(1);
-        setTieneMas(true);
-        setLoading(true);
-        setCargandoMas(false);
+        //Agrego un setTimeout para que se evite un fetch por cada tecla apretada
+        const timer = setTimeout(() => {
+            setDestinos([]);
+            setPagina(1);
+            setTieneMas(true);
+            setLoading(true);
+            setCargandoMas(false);
+        }, 500)
+
+        //Si el usuario sigue escribiento cancelamos el setTimeout anterior
+        return () => clearTimeout(timer);
+        
     }, [filtro]);
+
 
     //Este useEffect hace el fetch cada vez que pagina o filtro cambian
     useEffect(() => {
