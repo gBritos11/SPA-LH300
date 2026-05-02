@@ -28,7 +28,7 @@ const useScrollInfinito = (callback, activo) => {
 
         //El observador mira a ese div
         if (elementoActual) {
-            observador.disconnect();
+            observador.observe(elementoActual);
         }
 
         //Fn de limpieza cuando el componenete se desmonta o activo cambio, dejamos de observar

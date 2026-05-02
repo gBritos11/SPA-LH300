@@ -41,7 +41,7 @@ const Inicio = () => {
             {destinos.length === 0 && !loading && !cargandoMas ? (
                 <MensajesApp 
                     tipo="vacio"
-                    mensaje={filtro ? `No encontramos destinos para "S{filtro}"` : "No hay destinos disponibles"}
+                    mensaje={filtro ? `No encontramos destinos para "${filtro}"` : "No hay destinos disponibles"}
                 />
             ) : (
                 <div className='grid grid-cols-1 sm:grid:cols-2 md:grid-cols-3 gap-8'>
@@ -59,7 +59,7 @@ const Inicio = () => {
             <div ref={refObservador} className="h-4"/>
 
             {/* Spiner mientras carga la sig pag */}
-            {loading && destinos.length > 0 && (
+            {(loading || cargandoMas) && destinos.length > 0 && (
                 <MensajesApp tipo="cargando" mensaje="Cargando mas destinos..."/>
             )}
 
