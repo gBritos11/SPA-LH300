@@ -9,8 +9,10 @@ const BASE_URL = `https://69e933af55d62f34797a51fc.mockapi.io`;
 const fetchData = async (endpoint) => {
     const respuesta = await fetch(`${BASE_URL}${endpoint}`);
 
-    {/* fetch() NO lanza error si el servidor responde 404 o 500. */}
-    {/* Tenemos que verificarlo manualmente con response.ok */}
+    if (respuesta.status === 404) {
+        return []; 
+    }
+    
     if (!respuesta.ok) {
         throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
     }
