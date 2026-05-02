@@ -1,15 +1,25 @@
 import { useState, useCallback } from 'react';
-import  useDestinos  from '../hooks/useDestinos';
+import useDestinos  from '../hooks/useDestinos';
 import useScrollInfinito from '../hooks/useScrollInfinito';
-import  Tarjeta from './../componentes/Tarjeta/Tarjeta'
+import Tarjeta from './../componentes/Tarjeta/Tarjeta'
 import { useNavigate } from "react-router-dom";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp"
 import Boton from '../componentes/Boton/Boton';
 import Busqueda from '../componentes/Busqueda/Busqueda';
 
+{/* Diccionario que traduce el valor del campo a texto legible para el usuario. Vive fuera del componente porque nunca cambia */}
+
+const NOMBRES_CAMPO = {
+    search: 'todos los campos',
+    pais: 'País',
+    ubicacion: 'Ubicación',
+    descripcion: 'Descripción'
+}
+
 const Inicio = () => {
     const [filtro, setFiltro] = useState('');
-    const {destinos, loading, cargandoMas, error, setPagina, tieneMas} = useDestinos(filtro);
+    const [campoFiltro, setCampoFiltro] = useState('search')
+    const {destinos, loading, cargandoMas, error, setPagina, tieneMas} = useDestinos(filtro, campoFiltro);
     const navigate = useNavigate();
     
     //el useCallback evita que la funcion se recree en cada render, sino el useScrollInfinito se dispararia en loop
@@ -31,17 +41,27 @@ const Inicio = () => {
         </MensajesApp>
     )
 
+    {/* Mensaje vacio con el campo Nombres campo */}
+    const mensajeVacio = filtro
+        ? `No hay resultados en ${NOMBRES_CAMPO[campoFiltro] || campoFiltro} para "${filtro}"`
+        : 'No hay destinos disponibles.'
+
     return (
         <div className='p-8'>
             <h1 className="text-3xl font-bold md-6">Destinos</h1>
             <div className='mb-8 flex justify-center'>
-                <Busqueda valor={filtro} onChange={setFiltro} />
+                <Busqueda valor={filtro} 
+                    onChange={setFiltro} 
+                    campo={campoFiltro}
+                    onCampoChange={setCampoFiltro}
+                
+                />
             </div>
 
             {destinos.length === 0 && !loading && !cargandoMas ? (
                 <MensajesApp 
                     tipo="vacio"
-                    mensaje={filtro ? `No encontramos destinos para "${filtro}"` : "No hay destinos disponibles"}
+                    mensaje={mensajeVacio}
                 />
             ) : (
                 <div className='grid grid-cols-1 sm:grid:cols-2 md:grid-cols-3 gap-8'>

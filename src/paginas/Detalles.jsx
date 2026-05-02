@@ -4,6 +4,8 @@ import useDestinoId from '../hooks/useDestinoId';
 import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
 import Boton from "../componentes/Boton/Boton";
 import { generarPDF } from '../servicios/pdfService';
+import Favorito from "../componentes/Favorito/Favorito";
+import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 
 const Detalles = () => {
   const { id } = useParams();
@@ -100,14 +102,16 @@ const Detalles = () => {
             <h2 className="font-semibold text-gray-700 mb-4">Alojamientos:</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {destino.alojamiento.map((a, i) => (
-                <div
+                <Tarjeta
                   key={i}
-                  className="border rounded-lg p-4 shadow-sm bg-white"
-                >
-                  <p className="font-bold text-gray-800">{a.nombre} ({a.tipo})</p>
-                  <p className="text-sm text-gray-600">{a.ubicacion} – {a.reseña}</p>
-                  <p className="text-sm text-orange-600">Presupuesto: ${a.presupuesto}</p>
-                </div>
+                  destino={{
+                    nombre: a.nombre,
+                    descripcion: a.reseña,
+                    presupuesto: a.presupuesto,
+                    pais: a.ubicacion,
+                  }}
+                  tipo="alojamiento"
+                />
               ))}
             </div>
           </div>
@@ -132,9 +136,9 @@ const Detalles = () => {
         )}
 
         <div className="mt-6 flex flex-wrap gap-4">
-          <Boton variant="primary" onClick={() => alert("Destino destacado!")}>
-            Destacar
-          </Boton>
+          {/* Botón de favorito */}
+          <Favorito destino={destino} />
+
           <Boton variant="secondary" onClick={() => alert("Destino puntuado!")}>
             Puntuar
           </Boton>

@@ -3,7 +3,7 @@ import { getDestinos } from "../Servicios/api";
 
 const LIMIT = 9;
 
-const useDestinos = (filtro = '' ) => {
+const useDestinos = (filtro = '', campoFiltro = 'seach' ) => {
     const [destinos, setDestinos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [cargandoMas, setCargandoMas] = useState(false);
@@ -24,7 +24,7 @@ const useDestinos = (filtro = '' ) => {
         //Si el usuario sigue escribiento cancelamos el setTimeout anterior
         return () => clearTimeout(timer);
         
-    }, [filtro]);
+    }, [filtro, campoFiltro]);
 
 
     //Este useEffect hace el fetch cada vez que pagina o filtro cambian
@@ -39,7 +39,7 @@ const useDestinos = (filtro = '' ) => {
                     setLoading(false);
                 }
 
-                const datos = await getDestinos(filtro, pagina, LIMIT);
+                const datos = await getDestinos(filtro, pagina, LIMIT, campoFiltro);
                 if(datos.length < LIMIT){
                     setTieneMas(false);
                 }
@@ -57,8 +57,8 @@ const useDestinos = (filtro = '' ) => {
         }
 
         fetchDestinos()
-    }, [filtro, pagina]);
-
+    }, [filtro, pagina, campoFiltro]); //campo en las dependecias del fetch tambien
+    
     return { destinos, loading, cargandoMas, error, pagina, setPagina, tieneMas};
 }
 
