@@ -30,7 +30,7 @@ const Busqueda = ({valor, onChange, campoFiltro, onCampoChange}) => {
             </div>
             {/* Select -> le permite al usuario por que campo buscar */}
             <select value={campoFiltro}
-                onCampoChange={(e) => onCampoChange(e.target.value)}
+                onChange={(e) => onCampoChange(e.target.value)}
                 className="py-2.5 px-4 rounded-full border border-gray-300 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 bg-white text-gray-800 text-sm transition-all duration-200 cursor-pointer"
                 >
                 <option value="search">Todos</option>

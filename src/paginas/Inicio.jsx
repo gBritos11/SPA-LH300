@@ -53,7 +53,7 @@ const Inicio = () => {
                 <Busqueda valor={filtro} 
                     onChange={setFiltro} 
                     campo={campoFiltro}
-                    onCampoChenge={setCampoFiltro}
+                    onCampoChange={setCampoFiltro}
                 
                 />
             </div>
