@@ -18,7 +18,7 @@ const Boton = ({
   const dicVariantes = {
     primary: "bg-orange-600 text-white hover:bg-orange-700 shadow-md hover:shadow-lg", // naranja intenso
     secondary: "bg-amber-100 text-amber-900 hover:bg-amber-200", // beige cálido
-    outline: "border-2 border-orange-600 text-orange-600 hover:bg-orange-50", // borde naranja
+    outline: "border-2 border-[#4FC3F7] text-black hover:bg-[#004080] hover:text-white", // borde azul
     ghost: "text-stone-700 hover:bg-stone-100", // gris-marrón suave
     danger: "bg-red-500 text-white hover:bg-red-600" // puedes dejarlo igual o pasarlo a un marrón rojizo
   };

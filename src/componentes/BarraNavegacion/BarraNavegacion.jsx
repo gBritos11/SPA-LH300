@@ -15,7 +15,7 @@ export const BarraNavegacion = () => {
     const { favoritos } = useFavoritos();
 
     return (
-        <nav className="sticky top-0 z-50 w-full bg-white shadow-md">
+        <nav className="sticky top-0 z-50 w-full bg-[#004080] shadow-md">
             <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
                 
                 <NavLink to="/" className="flex items-center">
@@ -30,7 +30,7 @@ export const BarraNavegacion = () => {
                     
                     <NavLink 
                         to="/favoritos" 
-                        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+                        className="flex items-center gap-2 text-white hover:text-orange-600 transition-colors"
                     >
                         {({ isActive }) => (
                         <>

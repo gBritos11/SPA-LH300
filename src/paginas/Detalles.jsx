@@ -83,10 +83,10 @@ const Detalles = () => {
           {/* Botón de favorito */}
           <Favorito destino={destino} />
 
-          <Boton variant="secondary" onClick={() => alert("Destino puntuado!")}>
+          <Boton variante="outline" onClick={() => alert("Destino puntuado!")}>
             Puntuar
           </Boton>
-          <Boton variant="outline" onClick={() => navigate("/")}>
+          <Boton variante="outline" onClick={() => navigate("/")}>
             Volver al inicio
           </Boton>
         </div>
