@@ -8,6 +8,9 @@ const useRanking = () => {
     useEffect(() => {
         const fetchRanking = async () => {
             try {
+
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
                 //Traemos todos los destinos limit=100 no treamos solo 9 porque ordenariamos los de 1 sola pag
                 const datos = await getDestinos('', 1, 100);
 
