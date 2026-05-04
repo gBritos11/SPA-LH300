@@ -22,10 +22,11 @@ const fetchData = async (endpoint) => {
 
 {/* Trae el listado completo de destinos */}
 {/* Uso: const destinos = await getDestinos() */}
-export const getDestinos = async (busqueda = '', pagina = 1, limite = 9) => {
+{/* nuevo parametro campo (default 'search') campo = el nombre de la query param que se usar en la url. SI nadie lo pasa usa search en el campo generico */}
+export const getDestinos = async (busqueda = '', pagina = 1, limite = 9, campo='search') => {
     let consulta = `?page=${pagina}&limit=${limite}`;
     if (busqueda){
-        consulta += `&search=${busqueda}`;
+        consulta += `&${campo}=${busqueda}`;
     }
 
     return fetchData(`/destino${consulta}`);

@@ -3,7 +3,7 @@ import { getDestinos } from "../Servicios/api";
 
 const LIMIT = 9;
 
-const useDestinos = (filtro = '' ) => {
+const useDestinos = (filtro = '', campoFiltro = 'search') => {
     const [destinos, setDestinos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [cargandoMas, setCargandoMas] = useState(false);
@@ -12,46 +12,39 @@ const useDestinos = (filtro = '' ) => {
     const [tieneMas, setTieneMas] = useState(true);
 
     useEffect(() => {
-        setDestinos([]);
-        setPagina(1);
-        setTieneMas(true);
-        setLoading(true);
-        setCargandoMas(false);
-    }, [filtro]);
-
-    //Este useEffect hace el fetch cada vez que pagina o filtro cambian
-    useEffect(() => {
         const fetchDestinos = async () => {
             try {
-                if (pagina === 1){
+                // Solo mostramos el spinner principal si es la primera página
+                if (pagina === 1) {
                     setLoading(true);
-                    setCargandoMas(false);
+                    setDestinos([]); // Limpiamos para la nueva búsqueda
                 } else {
                     setCargandoMas(true);
-                    setLoading(false);
                 }
 
-                const datos = await getDestinos(filtro, pagina, LIMIT);
-                if(datos.length < LIMIT){
-                    setTieneMas(false);
-                }
-
-                setDestinos(prev => 
-                    pagina === 1 ? datos : [...prev, ...datos]
-                )
-               
+                const datos = await getDestinos(filtro, pagina, LIMIT, campoFiltro);
+                
+                setTieneMas(datos.length === LIMIT);
+                setDestinos(prev => (pagina === 1 ? datos : [...prev, ...datos]));
+                setError(null);
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
                 setCargandoMas(false);
             }
-        }
+        };
 
-        fetchDestinos()
-    }, [filtro, pagina]);
+        const delay = filtro ? 500 : 0;
+        const timer = setTimeout(() => {
+            fetchDestinos();
+        }, delay);
 
-    return { destinos, loading, cargandoMas, error, pagina, setPagina, tieneMas};
-}
+        return () => clearTimeout(timer);
+
+    }, [filtro, pagina, campoFiltro]);
+
+    return { destinos, loading, cargandoMas, error, pagina, setPagina, tieneMas };
+};
 
 export default useDestinos;
