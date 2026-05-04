@@ -4,7 +4,7 @@ import logo from "../../assets/logo.png"; // Logo de la tienda
 
 const Pie = () => {
   return (
-    <footer className="bg-beige text-brown mt-10 shadow-inner">
+    <footer className="bg-[#004080] text-white mt-10 shadow-inner">
 
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row md:justify-around md:items-center gap-2">    
             {/* Logo + Navegación */}
@@ -36,7 +36,7 @@ const Pie = () => {
 
         <div className="max-w-7xl mx-auto px-6 py-6 flex justify-center">
             {/* Copyright */}
-            <div className="text-center text-sm text-gray-600">
+            <div className="text-center text-sm text-gray-100">
             © {new Date().getFullYear()} TravelHub. Todos los derechos reservados.
             </div>
         </div>

@@ -18,7 +18,7 @@ const Tarjeta = ({ destino, action, tipo = "destino" }) => {
   const cardClasses =
     tipo === "destino"
       ? "max-w-sm bg-stone-100 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col"
-      : "max-w-xs bg-white rounded-lg border p-4 shadow-sm flex flex-col";
+      : "max-w-xs bg-white rounded-lg border border-[#4FC3F7] p-4 shadow-sm flex flex-col";
 
   return (
     <div className={cardClasses}>

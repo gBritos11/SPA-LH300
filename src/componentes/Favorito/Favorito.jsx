@@ -17,7 +17,7 @@ const Favorito = ({ destino, className = "" }) => {
       <span
         className={`p-2 rounded-full transition-colors ${
           favorito
-            ? "bg-orange-100 text-orange-600"
+            ? "bg-orange-100 text-orange-600 hover:text-orange-5+400 hover:bg-gray-100"
             : "bg-gray-100 text-gray-400 hover:text-orange-500 hover:bg-orange-50"
         }`}
       >
