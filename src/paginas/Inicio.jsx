@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp"
 import Boton from '../componentes/Boton/Boton';
 import Busqueda from '../componentes/Busqueda/Busqueda';
+import Ranking from '../componentes/Ranking/Ranking';
 
 {/* Diccionario que traduce el valor del campo a texto legible para el usuario. Vive fuera del componente porque nunca cambia */}
 
@@ -48,48 +49,59 @@ const Inicio = () => {
 
     return (
         <div className='p-8'>
-            <h1 className="text-3xl font-bold md-6">Destinos</h1>
-            <div className='mb-8 flex justify-center'>
-                <Busqueda valor={filtro} 
-                    onChange={setFiltro} 
-                    campo={campoFiltro}
-                    onCampoChange={setCampoFiltro}
-                
-                />
+        <h1 className="text-3xl font-bold mb-6">Destinos</h1>
+        <div className='mb-8 flex justify-center'>
+            <Busqueda
+                valor={filtro}
+                onChange={setFiltro}
+                campo={campoFiltro}
+                onCampoChange={setCampoFiltro}
+            />
+        </div>
+
+        <div className='flex flex-col lg:flex-row gap-8 items-start'>
+
+            {/* COL IZQ: grilla de destinos */}
+            <div className='flex-1'>
+                {destinos.length === 0 && !loading && !cargandoMas ? (
+                    <MensajesApp tipo="vacio" mensaje={mensajeVacio} />
+                ) : (
+                    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8'>
+                        {destinos.map((destino) => (
+                            <Tarjeta
+                                key={destino.id}
+                                destino={destino}
+                                action={() => navigate(`/destino/${destino.id}`)}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                <div className="h-20 flex items-center justify-center">
+                    {cargandoMas && (
+                        <div className='flex items-center gap-3'>
+                            <div className='animate-spin rounded-full h-8 w-8 border-4 border-orange-200 border-t-orange-500' />
+                            <p className='text-orange-500 text-sm font-medium'>
+                                Cargando más destinos
+                            </p>
+                        </div>
+                    )}
+                    {!tieneMas && !cargandoMas && destinos.length > 0 && (
+                        <p className='text-gray-400 text-sm'>
+                            Has visto todos los destinos 🌍
+                        </p>
+                    )}
+                </div>
+
+                <div ref={refObservador} className="h-4" />
             </div>
 
-            {destinos.length === 0 && !loading && !cargandoMas ? (
-                <MensajesApp 
-                    tipo="vacio"
-                    mensaje={mensajeVacio}
-                />
-            ) : (
-                <div className='grid grid-cols-1 sm:grid:cols-2 md:grid-cols-3 gap-8'>
-                    {destinos.map((destino) => (
-                        <Tarjeta
-                            key={destino.id}
-                            destino={destino}
-                            action={() => navigate(`/destino/${destino.id}`)}
-                        />
-                    ))}
-                </div>
-            )}
+            {/* COL DER: ranking sticky */}
+            <Ranking />
 
-            {/* Div invisible- el disparador del scroll infinito */}
-            <div ref={refObservador} className="h-4"/>
-
-            {/* Spiner mientras carga la sig pag */}
-            {(loading || cargandoMas) && destinos.length > 0 && (
-                <MensajesApp tipo="cargando" mensaje="Cargando mas destinos..."/>
-            )}
-
-            {/* Fin de lista */}
-            {!tieneMas && !cargandoMas && destinos.length > 0 && (
-                <p className="text-center text-gray-400 mt-8 text-sm">
-                    Has visto todos los destinos 🌍
-                </p>
-            )}
         </div>
+    </div>
+
     )
     
 }
