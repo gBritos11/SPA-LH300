@@ -2,6 +2,8 @@ import { NavLink } from "react-router-dom";
 import { Heart, User } from "lucide-react"; // User para perfil(nombre)
 import Boton from "../Boton/Boton"; // Importo el componente por si a futuro agregarmos botones al navbar
 import logoImg from "./../../assets/logo.png";
+import { useContext } from "react";
+import { UsuarioContext } from "../../context/UsuarioContext";
 import useFavoritos from "./../../hooks/useFavoritos";
 
 const estiloNavLink = ({ isActive }) => 
@@ -12,6 +14,7 @@ const estiloNavLink = ({ isActive }) =>
 
 export const BarraNavegacion = () => {
 
+    const { usuario } = useContext(UsuarioContext);
     const { favoritos } = useFavoritos();
 
     return (
@@ -25,6 +28,14 @@ export const BarraNavegacion = () => {
                         className="h-15 w-auto object-contain hover:opacity-80 transition-opacity" 
                     />
                 </NavLink>
+
+                 {/* 🔹 Aquí se muestra el saludo si hay usuario */}
+                {usuario && (
+                    <div className="flex items-center gap-2 text-slate-700">
+                    <User size={20} />
+                    <span>Hola, {usuario}</span>
+                    </div>
+                )}
 
                 <div className="flex items-center gap-8">
                     
