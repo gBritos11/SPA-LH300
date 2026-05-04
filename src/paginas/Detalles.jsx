@@ -6,6 +6,7 @@ import Boton from "../componentes/Boton/Boton";
 import { generarPDF } from '../servicios/pdfService';
 import Favorito from "../componentes/Favorito/Favorito";
 import Tarjeta from "../componentes/Tarjeta/Tarjeta";
+import { Download, Loader2, CheckCircle } from "lucide-react";
 
 const Detalles = () => {
   const { id } = useParams();
@@ -43,8 +44,8 @@ const Detalles = () => {
         {/* Si llegamos aca el pdf se genero sin errores */}
         setEstadoPDF('exito');
 
-        {/* Ocultamos el msj de exito despues de 3 seg */}
-        setTimeout(() => setEstadoPDF(null), 3000);
+        const timer = setTimeout(() => setEstadoPDF(null), 7000);
+        return () => clearTimeout(timer);
 
       } catch (err) {
         {/* Si algo fallo (img no cargo, jsPDF tuvo un problema) */}
@@ -135,22 +136,36 @@ const Detalles = () => {
           />
         )}
 
-        <div className="mt-6 flex flex-wrap gap-4">
+        <div className="mt-6 flex flex-wrap gap-4 items-center">
           {/* Botón de favorito */}
           <Favorito destino={destino} />
 
           <Boton variant="secondary" onClick={() => alert("Destino puntuado!")}>
             Puntuar
           </Boton>
-          {/* boton descarga pdf el texto cambia segun el estado */}
+
           <Boton 
-            variant='outline'
             onClick={handleDescargarPDF}
             disabled={generando}
-            className={generando ? 'opacity-70 cursor-wait' : ''}
-          >
-            {generando ? 'Generando...' : 'Descargar PDF'}
+            className={`p-2 rounded-full transition-all duration-300 ${
+              estadoPDF === 'exito' 
+                ? 'bg-green-100 text-green-600' 
+                : 'hover:bg-gray-100 text-gray-600'
+              } ${generando ? 'cursor-wait' : 'cursor-pointer'}`}
+              title="Descargar PDF"
+            >
+
+            <div className="flex items-center gap-2">
+              {generando ? (
+                <Loader2 className="animate-spin" size={24} />
+              ) : estadoPDF === 'exito' ? (
+                <CheckCircle size={24} />
+              ) : (
+                <Download size={24} />
+              )}
+            </div>
           </Boton>
+
           <Boton variant="outline" onClick={() => navigate("/")}>
             Volver al inicio
           </Boton>
