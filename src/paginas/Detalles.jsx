@@ -1,13 +1,14 @@
+import { useState } from 'react';
 import { useParams, useNavigate  } from "react-router-dom";
 import useDestinoId from '../hooks/useDestinoId';
 import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
 import Boton from "../componentes/Boton/Boton";
+import { generarPDF } from '../servicios/pdfService';
 import Favorito from "../componentes/Favorito/Favorito";
 import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 import SelectorEstrellas from "../componentes/SelectorEstrellas/SelectorEstrellas";
 import { votarDestino } from "../servicios/votacionService";
-/* import { generarPDF } from "../servicios/pdfService"; */
-import { useState } from "react";
+import { Download, Loader2, CheckCircle } from "lucide-react";
 
 const Detalles = () => {
   const { id } = useParams();
@@ -97,6 +98,38 @@ const Detalles = () => {
   } 
 
     
+
+    if (!destino) return null;
+
+    {/* Funcion que se ejecuta al hacer click en el boton */}
+    const handleDescargarPDF = async () => {
+      //Activamos el estado de generando -> el boton cambia su texto
+      setGenerando(true);
+
+      //Reseteamos el mensaje anterior por si el usuario intenta de nuevo
+      setEstadoPDF(null);
+
+      try {
+        {/* le pasamos el objeto destino completo */}
+        {/* El servicio sabe como armar el pdf */}
+        await generarPDF(destino);
+
+        {/* Si llegamos aca el pdf se genero sin errores */}
+        setEstadoPDF('exito');
+
+        const timer = setTimeout(() => setEstadoPDF(null), 7000);
+        return () => clearTimeout(timer);
+
+      } catch (err) {
+        {/* Si algo fallo (img no cargo, jsPDF tuvo un problema) */}
+        setEstadoPDF('error');
+        console.error('Error al generar PDF:', err);
+
+      } finally {
+        {/* Se ejecuta simpre, haya error o no. Vuelve habilitar el boton */}
+        setGenerando(false);
+      }
+    }
 
   return (
     
@@ -189,29 +222,54 @@ const Detalles = () => {
           </div>
         </div>
 
-        {/* Feedback PDF */}
-        {estadoPDF === 'exito' && (
-                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                        <p className="text-green-600 text-sm font-medium text-center">
-                          PDF descargado correctamente
-                        </p>
-                    </div>
-                )}
-                {estadoPDF === 'error' && (
-                    <MensajesApp tipo="error" mensaje="No se pudo generar el PDF." />
-                )}
+        {/* Mostramos el msj justo antes del grupo de botones para que sea visible sin hacer scroll */}
 
-        <div className="mt-6 flex flex-wrap gap-4">
+        {estadoPDF === 'exito' && (
+          <div className='mt-4 p-3 bg-green-50 border border-green-200 rounded-lg'>
+            <p className='text-green-600 text-sm font-medium text-center'>
+              PDF descargado correctamente
+            </p>
+          </div>
+        )}
+
+        {estadoPDF === 'error' && (
+          <MensajesApp 
+            tipo="error"  
+            mensaje="No se pudo generar el PDF. Intentá de nuevo"
+            
+          />
+        )}
+
+        <div className="mt-6 flex flex-wrap gap-4 items-center">
           {/* Botón de favorito */}
-          <Favorito destino={destinoMostrado} />
-          <Boton
-              variant="outline"
-              onClick={handleDescargarPDF}
-              disabled={generando}
-              className={generando ? 'opacity-70 cursor-wait' : ''}
+          <Favorito destino={destino} />
+
+          <Boton variant="secondary" onClick={() => alert("Destino puntuado!")}>
+            Puntuar
+          </Boton>
+
+          <Boton 
+            onClick={handleDescargarPDF}
+            disabled={generando}
+            className={`p-2 rounded-full transition-all duration-300 ${
+              estadoPDF === 'exito' 
+                ? 'bg-green-100 text-green-600' 
+                : 'hover:bg-gray-100 text-gray-600'
+              } ${generando ? 'cursor-wait' : 'cursor-pointer'}`}
+              title="Descargar PDF"
             >
-              {generando ? 'Generando...' : 'Descargar PDF'}
-            </Boton>
+
+            <div className="flex items-center gap-2">
+              {generando ? (
+                <Loader2 className="animate-spin" size={24} />
+              ) : estadoPDF === 'exito' ? (
+                <CheckCircle size={24} />
+              ) : (
+                <Download size={24} />
+              )}
+            </div>
+          </Boton>
+
           <Boton variant="outline" onClick={() => navigate("/")}>
             Volver al inicio
           </Boton>
