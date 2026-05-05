@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Star } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 {/* recibe: puntajeActual -> calificacion dentro de destino. onVotar -> el usuario elige cant de estrellas. bloqueado -> true si el usuario ya voto ese destino */}
 const SelectorEstrellas = ({puntajeActual = 0, onVotar, bloqueado = false}) => {
+    const {t} = useTranslation();
     {/* estrellasHover guarda sobre que estre esta. null -> el mouse no esta sobre ning estrella */}
     const [estrellasHover, setEstrellasHover] = useState(null);
 
@@ -26,7 +28,7 @@ const SelectorEstrellas = ({puntajeActual = 0, onVotar, bloqueado = false}) => {
         <div className="flex flex-col gap-2">
 
             <p className="text-sm font-semibold text-gray-700">
-                {bloqueado ? 'Tu puntuación:' : '¿Cómo calificaría este destino'}
+                {bloqueado ? t('selectorEstrellas.tu_puntuacion') : t('selectorEstrellas.pregunta')}
             </p>
 
             {/* grupo de estrellas */}
@@ -72,7 +74,7 @@ const SelectorEstrellas = ({puntajeActual = 0, onVotar, bloqueado = false}) => {
             {/* Mensaje de bloqueo */}
             {bloqueado && (
                 <p className="text-xs text-gray-400 italic">
-                    Ya votaste este destino
+                    {t('selectorEstrellas.ya_votaste')}
                 </p>
             )}
         </div>

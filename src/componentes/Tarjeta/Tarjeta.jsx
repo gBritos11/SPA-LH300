@@ -2,8 +2,10 @@ import Boton from '../Boton/Boton';
 import { ArrowRight } from 'lucide-react';
 import estilo from './Tarjeta.module.css';
 import Favorito from '../Favorito/Favorito';
+import { useTranslation } from 'react-i18next';
 
 const Tarjeta = ({ destino, action, tipo = "destino" }) => { 
+  const {t} = useTranslation();
   if (!destino) return null;
 
   const { 
@@ -56,7 +58,7 @@ const Tarjeta = ({ destino, action, tipo = "destino" }) => {
               iconoDerecha={<ArrowRight size={18} />}
               className="mt-4 w-full" 
             >
-              Ver más
+              {t('tarjeta.ver_mas')}
             </Boton>
           </div>
         </>
@@ -69,7 +71,7 @@ const Tarjeta = ({ destino, action, tipo = "destino" }) => {
             {nombre}
           </h2>
           <p className="text-sm text-gray-600 mt-1">{descripcion}</p>
-          <p className="text-sm text-orange-600 mt-1">Presupuesto: ${presupuesto}</p>
+          <p className="text-sm text-orange-600 mt-1">{t('tarjeta.presupuesto')}: ${presupuesto}</p>
         </div>
       )}
     </div>

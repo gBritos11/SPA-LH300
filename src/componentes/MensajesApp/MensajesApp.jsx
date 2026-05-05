@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 const MensajesApp = ({ 
   tipo = 'vacio', 
   mensaje, 
@@ -6,23 +8,24 @@ const MensajesApp = ({
   children 
 }) => {
   
+  const { t } = useTranslation();
   // Configuraciones por tipo
   const configuracion = {
     cargando: {
       color: "text-orange-600",
       bgIcono: "animate-spin rounded-full h-16 w-16 border-4 border-orange-200 border-t-orange-600",
-      textoDefault: "Cargando destinos...",
+      textoDefault: t('mensajes.cargando'),
       emoji: null
     },
     error: {
       color: "text-red-600",
       emoji: "⚠️",
-      textoDefault: "Hubo un problema al cargar los destinos."
+      textoDefault: t('mensajes.error')
     },
     vacio: {
       color: "text-gray-500",
       emoji: "🗺️",
-      textoDefault: "No hay destinos para mostrar."
+      textoDefault: t('mensajes.vacio')
     }
   };
 

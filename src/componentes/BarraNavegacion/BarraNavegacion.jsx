@@ -5,6 +5,7 @@ import logoImg from "./../../assets/logo.png";
 import { useContext } from "react";
 import { UsuarioContext } from "../../context/UsuarioContext";
 import useFavoritos from "./../../hooks/useFavoritos";
+import { useTranslation } from 'react-i18next'; 
 
 const estiloNavLink = ({ isActive }) => 
     isActive 
@@ -16,6 +17,12 @@ export const BarraNavegacion = () => {
 
     const { usuario } = useContext(UsuarioContext);
     const { favoritos } = useFavoritos();
+    const { t, i18n } = useTranslation();
+
+    const cambiarIdioma = () => {
+        const nuevoIdioma = i18n.language === 'es' ? 'en' : 'es'
+        i18n.changeLanguage(nuevoIdioma)
+    }
 
     return (
         <nav className="sticky top-0 z-50 w-full bg-[#004080] shadow-md">
@@ -33,12 +40,18 @@ export const BarraNavegacion = () => {
                 {usuario && (
                     <div className="flex items-center gap-2 text-slate-700">
                     <User size={20} />
-                    <span>Hola, {usuario}</span>
+                    <span>{t('navbar.hola')}, {usuario}</span>
                     </div>
                 )}
 
                 <div className="flex items-center gap-8">
-                    
+                    <button 
+                        onClick={cambiarIdioma}
+                        className="text-white font-semibold text-sm border border-white rounded-full px-3 py-1 hover:bg-white hover:text-[#004080] transition-colors"
+                    >
+                        {i18n.language === 'es' ? 'EN' : 'ES'}
+                    </button>
+
                     <NavLink 
                         to="/favoritos" 
                         className="flex items-center gap-2 text-white hover:text-orange-600 transition-colors"
@@ -53,7 +66,7 @@ export const BarraNavegacion = () => {
                                 </span>
                             )}
                         </div>
-                            <span className="hidden sm:inline">Favoritos</span>
+                            <span className="hidden sm:inline">{t('navbar.favoritos')}</span>
                         </>
                         )}
                     </NavLink>

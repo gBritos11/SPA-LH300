@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import Boton from "../Boton/Boton"; 
 import logo from "../../assets/logo.png"; // Logo de la tienda
+import { useTranslation } from 'react-i18next';
+
 
 const Pie = () => {
+    const {t} = useTranslation();
   return (
     <footer className="bg-[#004080] text-white mt-10 shadow-inner">
 
@@ -18,7 +21,7 @@ const Pie = () => {
 
             {/* Redes Sociales */}
             <div className="flex flex-col items-center gap-3">
-                <span className="font-semibold">Síguenos</span>
+                <span className="font-semibold">{t('pie.siguenos')}</span>
                 <div className="flex gap-4">
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-naranja">
                     Facebook
@@ -37,7 +40,7 @@ const Pie = () => {
         <div className="max-w-7xl mx-auto px-6 py-6 flex justify-center">
             {/* Copyright */}
             <div className="text-center text-sm text-gray-100">
-            © {new Date().getFullYear()} TravelHub. Todos los derechos reservados.
+            © {new Date().getFullYear()} TravelHub. {t('pie.derechos')}.
             </div>
         </div>
     </footer>

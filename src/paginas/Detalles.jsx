@@ -9,11 +9,13 @@ import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 import SelectorEstrellas from "../componentes/SelectorEstrellas/SelectorEstrellas";
 import { votarDestino } from "../servicios/votacionService";
 import { Download, Loader2, CheckCircle } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 const Detalles = () => {
   const { id } = useParams();
   const { destino, cargando, error } = useDestinoId(id);
   const navigate = useNavigate();
+  const {t} = useTranslation();
 
   const [destinoLocal, setDestinoLocal] = useState(null);
   const [votando, setVotando] = useState(false);
@@ -28,11 +30,11 @@ const Detalles = () => {
     }
   }, [estadoPDF]);
 
-  if (cargando) return <MensajesApp tipo="cargando" mensaje="Buscando destinos..." />;
+  if (cargando) return <MensajesApp tipo="cargando" />;
 
   if (error) return (
     <MensajesApp tipo="error" detalle={error}>
-      <Boton onClick={() => window.location.reload()}>Reintentar</Boton>
+      <Boton onClick={() => window.location.reload()}>{t('detalles.reintentar')}</Boton>
     </MensajesApp>
   );
 
@@ -100,20 +102,20 @@ const Detalles = () => {
           <p className="mt-4 text-gray-700 leading-relaxed">{destinoMostrado.descripcion}</p>
 
           <p className="mt-4 text-xl font-semibold text-orange-600">
-            Presupuesto: ${destinoMostrado.presupuesto}
+            {t('detalles.presupuesto')}: ${destinoMostrado.presupuesto}
           </p>
           
           {/* SECCIÓN DE CALIFICACIÓN: API vs VOTO PERSONAL */}
           <div className="mt-4 flex flex-col gap-1">
             <div className="flex items-center gap-2 text-gray-600">
-              <span className="font-medium text-lg">Promedio: {destinoMostrado.calificacion}</span>
-              <span className="text-xs">({destinoMostrado.cantidadVotos} votos de la comunidad)</span>
+              <span className="font-medium text-lg">{t('detalles.promedio')}: {destinoMostrado.calificacion}</span>
+              <span className="text-xs">({destinoMostrado.cantidadVotos} {t('detalles.votos_comunidad')})</span>
             </div>
             
             {yaVoto && (
               <div className="flex items-center gap-2 text-green-600 font-bold text-sm">
                 <CheckCircle size={16} />
-                <span>Tu puntuación: {miVotoGuardado} estrellas</span>
+                <span>{t('detalles.calificacion')}: {miVotoGuardado} {t('detalles.estrellas')}</span>
               </div>
             )}
           </div>
@@ -121,20 +123,20 @@ const Detalles = () => {
           {/* SELECTOR DE ESTRELLAS */}
           <div className="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100 shadow-sm">
             <h3 className="text-sm font-semibold text-gray-600 mb-2">
-              {yaVoto ? "Calificación guardada" : "¡Danos tu opinión!"}
+              {yaVoto ? t('detalles.calificacion_guardada') : t('detalles.da_tu_opinion')}
             </h3>
             <SelectorEstrellas
               puntajeActual={miVotoGuardado || destinoMostrado.calificacion}
               onVotar={handleVotar}
               bloqueado={yaVoto || votando}
             />
-            {votando && <p className="text-xs text-orange-500 mt-2 animate-pulse">Enviando voto...</p>}
-            {mensajeVoto === 'exito' && <p className="text-xs text-green-600 mt-2">¡Gracias por participar!</p>}
+            {votando && <p className="text-xs text-orange-500 mt-2 animate-pulse">{t('detalles.voto_enviando')}</p>}
+            {mensajeVoto === 'exito' && <p className="text-xs text-green-600 mt-2">{t('detalles.voto_exitoso')}</p>}
           </div>
 
           {/* ACCESIBILIDAD */}
           <div className="mt-6">
-            <h2 className="font-semibold text-gray-700">Accesibilidad:</h2>
+            <h2 className="font-semibold text-gray-700">{t('detalles.accesibilidad')}:</h2>
             <ul className="flex gap-2 mt-2">
               {destinoMostrado.accesibilidad.map((medio, i) => (
                 <li key={i} className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm">
@@ -146,7 +148,7 @@ const Detalles = () => {
 
           {/* ALOJAMIENTOS */}
           <div className="mt-8">
-            <h2 className="font-semibold text-gray-700 mb-4">Opciones de alojamiento:</h2>
+            <h2 className="font-semibold text-gray-700 mb-4">{t('detalles.alojamientos')}:</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {destinoMostrado.alojamiento.map((a, i) => (
                 <Tarjeta
@@ -167,7 +169,7 @@ const Detalles = () => {
         {/* FEEDBACK PDF */}
         {estadoPDF === 'exito' && (
           <div className='mt-4 p-3 bg-green-50 border border-green-200 rounded-lg'>
-            <p className='text-green-600 text-sm font-medium text-center'>Ficha descargada correctamente</p>
+            <p className='text-green-600 text-sm font-medium text-center'>{t('detalles.descarga_exitosa')}</p>
           </div>
         )}
 
@@ -186,7 +188,7 @@ const Detalles = () => {
           </button>
 
           <Boton variant="outline" onClick={() => navigate("/")}>
-            Volver al inicio
+            {t('detalles.volver')}
           </Boton>
         </div>
       </div>

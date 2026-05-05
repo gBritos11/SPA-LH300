@@ -1,0 +1,70 @@
+{
+    "navbar": {
+        "inicio": "Inicio",
+        "favoritos": "Favoritos",
+        "idioma": "Idioma",
+        "hola": "Hola"
+    },
+    "buscador": {
+        "placeholder": "Buscar destinos...",
+        "filtro_todos": "Todos",
+        "filtro_pais": "País",
+        "filtro_ubicacion": "Ubicación",
+        "filtro_descripcion": "Descripción"
+    },
+    "inicio": {
+        "titulo": "Destinos",
+        "cargando_mas": "Cargando más destinos",
+        "fin_lista": "Has visto todos los destinos 🌍"
+    },
+    "mensajes": {
+        "cargando": "Buscando destinos...",
+        "error": "Hubo un problema al cargar los destinos.",
+        "vacio": "No hay destinos para mostrar.",
+        "sin_resultados": "No hay resultados en"
+    },
+    "detalles": {
+    "presupuesto": "Presupuesto",
+    "promedio": "Promedio",
+    "votos_comunidad": "votos de la comunidad",
+    "calificacion": "Tu puntuación",
+    "estrellas": "estrellas",
+    "calificacion_guardada": "Calificación guardada",
+    "da_tu_opinion": "¡Danos tu opinión!",
+    "voto_enviando": "Enviando voto...",
+    "voto_exitoso": "¡Gracias por participar!",
+    "descarga_exitosa": "Ficha descargada correctamente",
+    "accesibilidad": "Accesibilidad",
+    "alojamientos": "Alojamientos",
+    "volver": "Volver al inicio",
+    "reintentar": "Reintentar"
+},
+    "favoritos": {
+        "titulo": "Mis Favoritos",
+        "vacio": "Todavía no tenés destinos guardados.",
+        "sin_resultados": "No encontramos resultados para"
+    },
+    "ranking": {
+        "titulo": "Top 10 Destinos",
+        "sin_calificados": "Sin destinos calificados aún",
+        "votos": "votos"
+    },
+    "modal": {
+        "titulo": "Ingresa tu nombre",
+        "placeholder": "Tu nombre...",
+        "boton": "Ingresar"
+    },
+    "tarjeta": {
+        "ver_mas": "Ver más",
+        "presupuesto": "Presupuesto"
+    },
+    "selectorEstrellas": {
+        "pregunta": "¿Cómo calificarías este destino?",
+        "tu_puntuacion": "Tu puntuación:",
+        "ya_votaste": "Ya votaste este destino"
+    },
+    "pie": {
+        "siguenos": "Síguenos",
+        "derechos": "Todos los derechos reservados."
+    }
+}

@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import useRanking from "../../hooks/useRanking";
 import { Trophy, Star } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 const Ranking = () => {
     const { ranking, cargando } = useRanking();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <aside className="sticky top-24 h-fit max-h-[80vh] overflow-y-auto w-72 bg-white rounded-xl shadow-lg border border-gray-100 p-4">
@@ -12,7 +14,7 @@ const Ranking = () => {
             {/* HEADER DEL RANKING */}
             <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
                 <Trophy size={20} className="text-orange-500" />
-                <h2 className="font-bold text-gray-800 text-lg">Top 10 Destinos</h2>
+                <h2 className="font-bold text-gray-800 text-lg">{t('ranking.titulo')}</h2>
             </div>
 
             {/* ESTADO DE CARGA */}
@@ -22,7 +24,7 @@ const Ranking = () => {
                 </div>
             ) : ranking.length === 0 ? (
                 <p className="text-gray-400 text-sm text-center py-4">
-                    Sin destinos calificados aún
+                    {t('ranking.sin_calificados')}
                 </p>
             ) : (
                 <ol className="flex flex-col gap-2">
@@ -63,7 +65,7 @@ const Ranking = () => {
                                     {destino.calificacion}
                                     {destino.cantidadVotos > 0 && (
                                         <span className="ml-1 text-gray-400">
-                                            ({destino.cantidadVotos})
+                                            ({destino.cantidadVotos} {t('ranking.votos')})
                                         </span>
                                     )}
 
