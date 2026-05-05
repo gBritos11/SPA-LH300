@@ -1,8 +1,10 @@
 import { Heart } from "lucide-react";
 import useFavoritos from "../../hooks/useFavoritos";
+import { useTranslation } from 'react-i18next';
 
 const Favorito = ({ destino, className = "" }) => {
   const { esFavorito, validacionFavorito } = useFavoritos();
+  const {t} = useTranslation();
 
   const favorito = esFavorito(destino.id);
 

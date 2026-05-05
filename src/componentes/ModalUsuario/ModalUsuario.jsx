@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 const ModalUsuario = ({ onConfirm }) => {
   const [usuario, setUsuario] = useState("");
+  const { t } = useTranslation();
 
   const handleConfirm = () => {
     localStorage.setItem("usuario", usuario);
@@ -11,12 +13,12 @@ const ModalUsuario = ({ onConfirm }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
-        <h2 className="text-xl font-bold mb-4">Ingresa tu nombre</h2>
+        <h2 className="text-xl font-bold mb-4">{t('modal.titulo')}</h2>
         <input
           type="text"
           value={usuario}
           onChange={(e) => setUsuario(e.target.value)}
-          placeholder="Tu nombre..."
+          placeholder={t('modal.placeholder')}
           className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
         <button
@@ -28,7 +30,7 @@ const ModalUsuario = ({ onConfirm }) => {
               : "bg-orange-500 text-white hover:bg-orange-600 transition-colors"
           }`}
         >
-          Ingresar
+          {t('modal.boton')}
         </button>
       </div>
     </div>

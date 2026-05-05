@@ -1,6 +1,9 @@
 import { Search, XCircle } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 const Busqueda = ({ valor, onChange, campoFiltro, onCampoChange }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col sm:flex-row gap-3 w-full max-w-2xl font-montserrat">
       {/* Input de búsqueda */}
@@ -12,7 +15,7 @@ const Busqueda = ({ valor, onChange, campoFiltro, onCampoChange }) => {
 
         <input
           type="text"
-          placeholder="Buscar destinos..."
+          placeholder={t('buscador.placeholder')}
           value={valor}
           onChange={(e) => onChange(e.target.value)}
           className="w-full pl-10 pr-10 py-3 rounded-lg border border-gray-300 
@@ -39,10 +42,10 @@ const Busqueda = ({ valor, onChange, campoFiltro, onCampoChange }) => {
                         bg-white text-deepblue font-montserrat text-sm shadow-sm 
                         transition-all duration-200 cursor-pointer hover:border-sky hover:ring-sky-200"
             >
-            <option value="search">Todos</option>
-            <option value="pais">País</option>
-            <option value="ubicacion">Ubicación</option>
-            <option value="descripcion">Descripción</option>
+            <option value="search">{t('buscador.filtro_todos')}</option>
+            <option value="pais">{t('buscador.filtro_pais')}</option>
+            <option value="ubicacion">{t('buscador.filtro_ubicacion')}</option>
+            <option value="descripcion">{t('buscador.filtro_descripcion')}</option>
         </select>
     </div>
   );

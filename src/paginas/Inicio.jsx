@@ -7,6 +7,7 @@ import MensajesApp from "../componentes/MensajesApp/MensajesApp"
 import Boton from '../componentes/Boton/Boton';
 import Busqueda from '../componentes/Busqueda/Busqueda';
 import Ranking from '../componentes/Ranking/Ranking';
+import { useTranslation } from 'react-i18next';
 
 {/* Diccionario que traduce el valor del campo a texto legible para el usuario. Vive fuera del componente porque nunca cambia */}
 
@@ -22,6 +23,7 @@ const Inicio = () => {
     const [campoFiltro, setCampoFiltro] = useState('search')
     const {destinos, loading, cargandoMas, error, setPagina, tieneMas} = useDestinos(filtro, campoFiltro);
     const navigate = useNavigate();
+    const {t} = useTranslation();
     
     //el useCallback evita que la funcion se recree en cada render, sino el useScrollInfinito se dispararia en loop
     const cargarMas = useCallback(() => {
@@ -32,24 +34,24 @@ const Inicio = () => {
     const refObservador = useScrollInfinito(cargarMas, tieneMas && !loading && !cargandoMas)
 
     if (loading && destinos.length === 0 && !filtro){
-        return <MensajesApp tipo="cargando" mensaje="Buscando destinos..." />;
+        return <MensajesApp tipo="cargando" />;
 
     }
 
     if (error) return (
         <MensajesApp tipo="error" detalle={error}>
-            <Boton onClick={() => window.location.reload()}>Reintentar</Boton>
+            <Boton onClick={() => window.location.reload()}>{t('detalles.reintentar')}</Boton>
         </MensajesApp>
     )
 
     {/* Mensaje vacio con el campo Nombres campo */}
     const mensajeVacio = filtro
-        ? `No hay resultados en ${NOMBRES_CAMPO[campoFiltro] || campoFiltro} para "${filtro}"`
-        : 'No hay destinos disponibles.'
+        ? `${t('mensajes.sin_resultados')} ${NOMBRES_CAMPO[campoFiltro] || campoFiltro} para "${filtro}"`
+        : t('mensajes.vacio')
 
     return (
         <div className='p-8'>
-        <h1 className="text-3xl font-bold mb-6">Destinos</h1>
+        <h1 className="text-3xl font-bold mb-6">{t('inicio.titulo')}</h1>
         <div className='mb-8 flex justify-center'>
             <Busqueda
                 valor={filtro}
@@ -82,13 +84,13 @@ const Inicio = () => {
                         <div className='flex items-center gap-3'>
                             <div className='animate-spin rounded-full h-8 w-8 border-4 border-orange-200 border-t-orange-500' />
                             <p className='text-orange-500 text-sm font-medium'>
-                                Cargando más destinos
+                                {t('inicio.cargando_mas')}
                             </p>
                         </div>
                     )}
                     {!tieneMas && !cargandoMas && destinos.length > 0 && (
                         <p className='text-gray-400 text-sm'>
-                            Has visto todos los destinos 🌍
+                            {t('inicio.fin_lista')}
                         </p>
                     )}
                 </div>

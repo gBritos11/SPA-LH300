@@ -1,0 +1,70 @@
+{
+    "navbar": {
+        "inicio": "Home",
+        "favoritos": "My Favorites",
+        "idioma": "Language",
+        "hola": "Hello"
+    },
+    "buscador": {
+        "placeholder": "Search destinations...",
+        "filtro_todos": "All",
+        "filtro_pais": "Country",
+        "filtro_ubicacion": "Location",
+        "filtro_descripcion": "Description"
+    },
+    "inicio": {
+        "titulo": "Destinations",
+        "cargando_mas": "Loading more destinations",
+        "fin_lista": "You've seen all destinations 🌍"
+    },
+    "mensajes": {
+        "cargando": "Searching destinations...",
+        "error": "There was a problem loading the destinations.",
+        "vacio": "No destinations to show.",
+        "sin_resultados": "No results in"
+    },
+    "detalles": {
+    "presupuesto": "Budget",
+    "promedio": "Average",
+    "votos_comunidad": "community votes",
+    "calificacion": "Your rating",
+    "estrellas": "stars",
+    "calificacion_guardada": "Saved rating",
+    "da_tu_opinion": "Share your opinion!",
+    "voto_enviando": "Sending vote...",
+    "voto_exitoso": "Thank you for participating!",
+    "descarga_exitosa": "Info sheet downloaded successfully",
+    "accesibilidad": "Accessibility",
+    "alojamientos": "Accommodations",
+    "volver": "Back to home",
+    "reintentar": "Retry"
+    },
+    "favoritos": {
+        "titulo": "My Favorites",
+        "vacio": "You have no saved destinations yet.",
+        "sin_resultados": "No results found for"
+    },
+    "ranking": {
+        "titulo": "Top 10 Destinations",
+        "sin_calificados": "No rated destinations yet",
+        "votos": "votes"
+    },
+    "modal": {
+        "titulo": "Enter your name",
+        "placeholder": "Your name...",
+        "boton": "Enter"
+    },
+    "tarjeta": {
+        "ver_mas": "See more",
+        "presupuesto": "Budget"
+    },
+    "selectorEstrellas": {
+        "pregunta": "How would you rate this destination?",
+        "tu_puntuacion": "Your rating:",
+        "ya_votaste": "You already voted for this destination"
+    },
+    "pie": {
+        "siguenos": "Follow us",
+        "derechos": "All rights reserved."
+    }
+}
