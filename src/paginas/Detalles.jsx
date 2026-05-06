@@ -39,7 +39,17 @@ const Detalles = () => {
     </MensajesApp>
   );
 
-  if (!destino) return null;
+  if (!destino) return (
+    <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col items-center">
+      <MensajesApp 
+        tipo="vacio" 
+        mensaje={t('mensajes.vacio')} 
+      />
+      <Boton className="mt-6" onClick={() => navigate("/")}>
+        {t('detalles.volver')}
+      </Boton>
+    </div>
+  );
 
   const obtenerVotosRealizados = () => JSON.parse(localStorage.getItem('misVotosPuntajes') || '{}');
   const miVotoGuardado = obtenerVotosRealizados()[destino.id];
