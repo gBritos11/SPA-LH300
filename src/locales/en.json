@@ -14,6 +14,7 @@
     },
     "inicio": {
         "titulo": "Destinations",
+        "encabezado": "Discover the best destinations in the world",
         "cargando_mas": "Loading more destinations",
         "fin_lista": "You've seen all destinations 🌍"
     },
@@ -68,6 +69,7 @@
         "derechos": "All rights reserved."
     },
     "error": {
-        "titulo": "Error Page"
+        "titulo": "Error Page",
+        "parrafo": "The page you are looking for does not exist or has been moved."
     }
 }

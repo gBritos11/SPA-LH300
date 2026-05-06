@@ -9,76 +9,72 @@ const Ranking = () => {
     const { t } = useTranslation();
 
     return (
-        <aside className="sticky top-24 h-fit max-h-[80vh] overflow-y-auto w-72 bg-white rounded-xl shadow-lg border border-gray-100 p-4">
+        <aside className="sticky top-24 h-fit max-h-[80vh] overflow-y-auto w-72 bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
 
-            {/* HEADER DEL RANKING */}
-            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
-                <Trophy size={20} className="text-orange-500" />
-                <h2 className="font-bold text-gray-800 text-lg">{t('ranking.titulo')}</h2>
+            {/* HEADER */}
+            <div className="flex items-center gap-2 mb-5 pb-4 border-b border-gray-100">
+                <div className="p-2 bg-orange-50 rounded-lg">
+                    <Trophy size={16} className="text-orange-500" />
+                </div>
+                <h2 className="font-bold text-gray-900 text-sm tracking-wide uppercase">
+                    {t('ranking.titulo')}
+                </h2>
             </div>
 
-            {/* ESTADO DE CARGA */}
+            {/* CARGANDO */}
             {cargando ? (
-                <div className="flex justify-center py-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-4 border-orange-200 border-t-orange-500"/>
+                <div className="flex justify-center py-8">
+                    <div className="animate-spin rounded-full h-7 w-7 border-4 border-orange-100 border-t-orange-500"/>
                 </div>
             ) : ranking.length === 0 ? (
-                <p className="text-gray-400 text-sm text-center py-4">
+                <p className="text-gray-400 text-sm text-center py-6">
                     {t('ranking.sin_calificados')}
                 </p>
             ) : (
-                <ol className="flex flex-col gap-2">
+                <ol className="flex flex-col gap-1">
                     {ranking.map((destino, index) => (
                         <li 
                             key={destino.id}
                             onClick={() => navigate(`/destino/${destino.id}`)}
-                            className="flex - items-center gap-3 p-2 rounded-lg hover:bg-orange-500 cursor-pointer transition-colors group"
+                            className="flex items-center gap-3 p-3 rounded-xl hover:bg-orange-50 cursor-pointer transition-all duration-200 group"
                         >
-                        {/* Numero de pos con estilo dif para 1, 2, 3 */}
-                        <span className={`
-                            text-sm font-bold w-6 text-center shrink-0
-                            ${index === 0 ? 'text-yellow-500' : ''}
-                            ${index === 1 ? 'text-gray-400' : ''}
-                            ${index === 2 ? 'text-orange-700' : ''}
-                            ${index > 2 ? 'text-gray-400' : ''}
-                        `}>
-                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
-                        </span>
+                            {/* POSICIÓN */}
+                            <span className="text-sm font-bold w-6 text-center shrink-0">
+                                {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : (
+                                    <span className="text-gray-400 text-xs">{index + 1}</span>
+                                )}
+                            </span>
 
-                        {/* IMAGEN DEL DESTINO */}
-                        <img
-                            src={destino.imagen || 'https://picsum.photos/40/40'}
-                            alt={destino.nombre}
-                            className="w-10 h-10 object-cover rounded-md shrink-0"
-                        />
+                            {/* IMAGEN */}
+                            <img
+                                src={destino.imagen || 'https://picsum.photos/40/40'}
+                                alt={destino.nombre}
+                                className="w-9 h-9 object-cover rounded-lg shrink-0"
+                            />
 
-                        {/* NOMBRE Y CALIFICACION */}
-                        <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gray-800 truncate group-hover:text-orange-600 transition-colors">
-                                {destino.nombre}
-                            </p>
-
-                            {/* CALIFICACION CON ESTRELLA */}
-                            <div className="flex items-center- gap-1">
-                                <Star size={12} className="text-orange-400 fill-current" />
-                                <span className="text-xs text-gray-500">
-                                    {destino.calificacion}
-                                    {destino.cantidadVotos > 0 && (
-                                        <span className="ml-1 text-gray-400">
-                                            ({destino.cantidadVotos} {t('ranking.votos')})
-                                        </span>
-                                    )}
-
-                                </span>
+                            {/* INFO */}
+                            <div className="flex-1 min-w-0">
+                                <p className="text-xs font-semibold text-gray-800 truncate group-hover:text-orange-600 transition-colors">
+                                    {destino.nombre}
+                                </p>
+                                <div className="flex items-center gap-1 mt-0.5">
+                                    <Star size={10} className="text-orange-400 fill-current" />
+                                    <span className="text-xs text-gray-400">
+                                        {destino.calificacion}
+                                        {destino.cantidadVotos > 0 && (
+                                            <span className="ml-1">
+                                                ({destino.cantidadVotos} {t('ranking.votos')})
+                                            </span>
+                                        )}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
                         </li>
                     ))}
                 </ol>
-            )
-            }
+            )}
         </aside>
-    )
-}
+    );
+};
 
 export default Ranking;
