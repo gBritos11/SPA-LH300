@@ -35,7 +35,7 @@ const Favoritos = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6 text-brown">Mis Favoritos</h1>
+      <h1 className="text-2xl font-bold mb-6 text-brown">{t('favoritos.titulo')}</h1>
 
       <div className='mb-8 flex justify-center'>
         <Busqueda
@@ -51,8 +51,8 @@ const Favoritos = () => {
           tipo="vacio"
           mensaje={
             filtro
-              ? `No encontramos resultados para "${filtro}" según "${campoFiltro}" en favoritos.`
-              : "Todavía no tienes destinos guardados."
+              ? `${t('favoritos.sin_resultados')} "${filtro}" según "${campoFiltro}" en favoritos.`
+              : t('favoritos.vacio')
           }
         />
       ) : (
