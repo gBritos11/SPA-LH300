@@ -38,11 +38,14 @@
     "da_tu_opinion": "¡Danos tu opinión!",
     "voto_enviando": "Enviando voto...",
     "voto_exitoso": "¡Gracias por participar!",
+    "descargar": "Descargar ficha",
     "descarga_exitosa": "Ficha descargada correctamente",
     "accesibilidad": "Accesibilidad",
     "alojamientos": "Alojamientos",
     "volver": "Volver al inicio",
-    "reintentar": "Reintentar"
+    "reintentar": "Reintentar",
+    "guardar": "Guardar",
+    "guardado": "Guardado"
 },
     "favoritos": {
         "titulo": "Mis Favoritos",

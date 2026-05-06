@@ -4,18 +4,19 @@ import useDestinoId from '../hooks/useDestinoId';
 import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
 import Boton from "../componentes/Boton/Boton";
 import { generarPDF } from '../servicios/pdfService';
-import Favorito from "../componentes/Favorito/Favorito";
 import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 import SelectorEstrellas from "../componentes/SelectorEstrellas/SelectorEstrellas";
 import { votarDestino } from "../servicios/votacionService";
-import { Download, Loader2, CheckCircle, ArrowLeft, MapPin } from "lucide-react";
+import { Download, Loader2, CheckCircle, ArrowLeft, MapPin, Heart } from "lucide-react";
 import { useTranslation } from 'react-i18next';
+import useFavoritos from '../hooks/useFavoritos';
 
 const Detalles = () => {
   const { id } = useParams();
   const { destino, cargando, error } = useDestinoId(id);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { esFavorito, validacionFavorito } = useFavoritos();
 
   const [destinoLocal, setDestinoLocal] = useState(null);
   const [votando, setVotando] = useState(false);
@@ -44,6 +45,7 @@ const Detalles = () => {
   const miVotoGuardado = obtenerVotosRealizados()[destino.id];
   const yaVoto = !!miVotoGuardado;
   const destinoMostrado = destinoLocal || destino;
+  const guardado = esFavorito(destinoMostrado.id);
 
   const handleVotar = async (puntaje) => {
     setVotando(true);
@@ -90,52 +92,81 @@ const Detalles = () => {
 
       <div className="flex flex-col lg:flex-row gap-10">
 
-        {/* COLUMNA IZQUIERDA — Imagen */}
-        <div className="lg:w-1/2 flex flex-col gap-4">
+        {/* COLUMNA IZQUIERDA — Solo imagen */}
+        <div className="lg:w-1/2">
           <div className="relative rounded-2xl overflow-hidden shadow-md">
             <img
               src={destinoMostrado.imagen}
               alt={destinoMostrado.nombre}
               className="w-full h-[420px] object-cover"
             />
-            {/* BADGE UBICACIÓN */}
             <div className="absolute bottom-4 left-4 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white text-sm px-3 py-1.5 rounded-full">
               <MapPin size={14} />
               <span>{destinoMostrado.ubicacion}, {destinoMostrado.pais}</span>
             </div>
           </div>
-
-          {/* ACCIONES RÁPIDAS */}
-          <div className="flex items-center gap-3">
-            <Favorito destino={destinoMostrado} />
-
-            <button 
-              onClick={handleDescargarPDF}
-              disabled={generando}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
-                estadoPDF === 'exito' 
-                  ? 'bg-green-50 text-green-600 border border-green-200' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-transparent'
-              } ${generando ? 'cursor-wait opacity-70' : 'cursor-pointer'}`}
-            >
-              {generando 
-                ? <><Loader2 className="animate-spin" size={16} /> {t('detalles.generando')}</> 
-                : estadoPDF === 'exito' 
-                  ? <><CheckCircle size={16} /> {t('detalles.descarga_exitosa')}</> 
-                  : <><Download size={16} /> {t('detalles.descargar')}</>
-              }
-            </button>
-          </div>
         </div>
 
-        {/* COLUMNA DERECHA — Info */}
+        {/* COLUMNA DERECHA */}
         <div className="lg:w-1/2 flex flex-col gap-6">
 
-          {/* TÍTULO Y DESCRIPCIÓN */}
+          {/* TÍTULO + ACCIONES */}
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 tracking-tight mb-3">
-              {destinoMostrado.nombre}
-            </h1>
+            <div className="flex items-start justify-between gap-4 mb-3">
+
+              <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
+                {destinoMostrado.nombre}
+              </h1>
+
+              {/* ACCIONES */}
+              <div className="flex items-center gap-2 shrink-0">
+
+                {/* FAVORITO */}
+                <button
+                  onClick={() => validacionFavorito(destinoMostrado)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    guardado
+                      ? 'bg-orange-50 text-orange-500'
+                      : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                  }`}
+                >
+                  <Heart 
+                    size={16} 
+                    className={guardado ? "fill-orange-500" : "fill-none stroke-current"} 
+                  />
+                  <span className="hidden sm:inline">
+                    {guardado ? t('detalles.guardado') : t('detalles.guardar')}
+                  </span>
+                </button>
+
+                {/* DESCARGA PDF */}
+                <button 
+                  onClick={handleDescargarPDF}
+                  disabled={generando}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    estadoPDF === 'exito' 
+                      ? 'bg-green-50 text-green-600' 
+                      : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                  } ${generando ? 'cursor-wait opacity-70' : 'cursor-pointer'}`}
+                >
+                  {generando 
+                    ? <Loader2 className="animate-spin" size={16} />
+                    : estadoPDF === 'exito' 
+                      ? <CheckCircle size={16} />
+                      : <Download size={16} />
+                  }
+                  <span className="hidden sm:inline">
+                    {generando 
+                      ? t('detalles.generando') 
+                      : estadoPDF === 'exito' 
+                        ? t('detalles.descarga_exitosa') 
+                        : t('detalles.descargar')
+                    }
+                  </span>
+                </button>
+              </div>
+            </div>
+
             <p className="text-gray-500 leading-relaxed">
               {destinoMostrado.descripcion}
             </p>
@@ -151,7 +182,6 @@ const Detalles = () => {
                 $ {destinoMostrado.presupuesto}
               </p>
             </div>
-
             <div className="bg-gray-50 rounded-2xl px-6 py-4 flex-1 text-center">
               <p className="text-xs text-gray-400 uppercase tracking-widest font-medium mb-1">
                 {t('detalles.promedio')}
@@ -200,15 +230,12 @@ const Detalles = () => {
 
           {/* ACCESIBILIDAD */}
           <div>
-            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">
+            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
               {t('detalles.accesibilidad')}
             </h2>
             <ul className="flex flex-wrap gap-2">
               {destinoMostrado.accesibilidad.map((medio, i) => (
-                <li 
-                  key={i} 
-                  className="px-4 py-1.5 bg-[#0a1628] text-white rounded-full text-xs font-medium"
-                >
+                <li key={i} className="px-4 py-1.5 bg-[#0a1628] text-white rounded-full text-xs font-medium">
                   {medio}
                 </li>
               ))}
@@ -217,7 +244,7 @@ const Detalles = () => {
 
           {/* ALOJAMIENTOS */}
           <div>
-            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-4">
+            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
               {t('detalles.alojamientos')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
