@@ -14,8 +14,8 @@ const Pie = () => {
             <div className="flex flex-col items-center md:items-center">
                 <img src={logo} alt="Logo tienda" className="w-20 h-auto" />
                 <nav className="flex md:flex-row gap-3">
-                <Link to="/">Inicio</Link>
-                <Link to="/favoritos">Favoritos</Link>
+                <Link to="/">{t('navbar.inicio')}</Link>
+                <Link to="/favoritos">{t('navbar.favoritos')}</Link>
                 </nav>
             </div>
 

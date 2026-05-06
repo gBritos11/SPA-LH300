@@ -66,5 +66,8 @@
     "pie": {
         "siguenos": "Follow us",
         "derechos": "All rights reserved."
+    },
+    "error": {
+        "titulo": "Error Page"
     }
 }
