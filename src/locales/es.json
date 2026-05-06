@@ -14,6 +14,7 @@
     },
     "inicio": {
         "titulo": "Destinos",
+        "encabezado": "Descubrí los mejores destinos del mundo",
         "cargando_mas": "Cargando más destinos",
         "fin_lista": "Has visto todos los destinos 🌍"
     },
@@ -68,6 +69,7 @@
         "derechos": "Todos los derechos reservados."
     },
         "error": {
-        "titulo": "Página de Error"
+        "titulo": "Página de Error",
+        "parrafo": "La página que buscás no existe o fue movida."
     }
 }

@@ -1,33 +1,40 @@
 import { Link } from "react-router-dom";
 
 const Boton = ({ 
-  children, // Contenido
-  to, // Si recibe este atributo el componente es un link
-  onClick, // Si recibe este atributo el componente es un button de acción
-  iconoIzquierda, // Icono a la izquierda
-  iconoDerecha, // Icono a la derecha
-  variante = "primary", // Variante de estilos, por defecto primario
-  className = "", // Asignación de estilos según corresponda
-  type = "button" // Por defecto es button, pero permite 'submit' para formularios
+  children,
+  to,
+  onClick,
+  iconoIzquierda,
+  iconoDerecha,
+  variante = "primary",
+  className = "",
+  type = "button"
 }) => {
   
-  // Estilos Bases
-  const estilosBase = "inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
+  // BASE — transiciones y estados comunes a todas las variantes
+  const estilosBase = "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 disabled:opacity-40 disabled:pointer-events-none";
   
-  // Variantes de estilos (Colores y Bordes)
+  // VARIANTES
   const dicVariantes = {
-    primary: "bg-orange-600 text-white hover:bg-orange-700 shadow-md hover:shadow-lg", // naranja intenso
-    secondary: "bg-amber-100 text-amber-900 hover:bg-amber-200", // beige cálido
-    outline: "border-2 border-[#4FC3F7] text-black hover:bg-[#004080] hover:text-white", // borde azul
-    ghost: "text-stone-700 hover:bg-stone-100", // gris-marrón suave
-    danger: "bg-red-500 text-white hover:bg-red-600" // puedes dejarlo igual o pasarlo a un marrón rojizo
+
+    // Naranja sólido — acción principal
+    primary: "bg-orange-500 text-white hover:bg-orange-600 shadow-sm hover:shadow-md",
+
+    // Navy suave — acción secundaria
+    secondary: "bg-[#0a1628] text-white hover:bg-[#0a1628]/80 shadow-sm",
+
+    // Contorno navy — acción terciaria
+    outline: "border border-[#0a1628] text-[#0a1628] hover:bg-[#0a1628] hover:text-white",
+
+    // Sin fondo — acción mínima
+    ghost: "text-gray-500 hover:text-gray-800 hover:bg-gray-100",
+
+    // Rojo — acción destructiva
+    danger: "bg-red-500 text-white hover:bg-red-600 shadow-sm"
   };
 
-
-  // Estilo final
   const estilos = `${estilosBase} ${dicVariantes[variante] || dicVariantes.primary} ${className}`;
 
-  // Contenido Interno
   const contenido = (
     <>
       {iconoIzquierda && <span className="shrink-0">{iconoIzquierda}</span>}
@@ -36,7 +43,6 @@ const Boton = ({
     </>
   );
 
-  // Lógica Polimórfica: es un link o un botón de accioón?
   if (to) {
     return (
       <Link to={to} className={estilos}>
