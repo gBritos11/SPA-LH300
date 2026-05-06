@@ -24,6 +24,16 @@ const Detalles = () => {
   const [generando, setGenerando] = useState(false);
   const [estadoPDF, setEstadoPDF] = useState(null);
 
+  // EFECTO DE REDIRECCIÓN: Si no hay destino válido, mandamos al usuario a la página de error
+  useEffect(() => {
+    if (!cargando) {
+      // Si hay un error de API o el objeto destino viene vacío/nulo
+      if (error || !destino || Object.keys(destino).length === 0) {
+        navigate("/error", { replace: true });
+      }
+    }
+  }, [destino, cargando, error, navigate]);
+
   useEffect(() => {
     if (estadoPDF === 'exito') {
       const timer = setTimeout(() => setEstadoPDF(null), 7000);
@@ -31,33 +41,19 @@ const Detalles = () => {
     }
   }, [estadoPDF]);
 
-  // 1. ESTADO DE CARGA
+  // Mientras carga, mostramos el spinner
   if (cargando) return <MensajesApp tipo="cargando" />;
 
-  // 2. MANEJO DE ERROR O DESTINO INEXISTENTE (Escudo principal)
-  if (error || !destino) {
-    return (
-      <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col items-center">
-        <MensajesApp 
-          tipo={error ? "error" : "vacio"} 
-          mensaje={error ? t('mensajes.error') : t('mensajes.vacio')} 
-        />
-        <Boton className="mt-6" onClick={() => navigate("/")}>
-          {t('detalles.volver')}
-        </Boton>
-      </div>
-    );
-  }
+  // Si no hay destino, retornamos null para evitar errores de renderizado mientras actúa la redirección
+  if (!destino || Object.keys(destino).length === 0) return null;
 
-  // 3. VARIABLES DE LÓGICA (Solo se ejecutan si 'destino' existe)
   const obtenerVotosRealizados = () => JSON.parse(localStorage.getItem('misVotosPuntajes') || '{}');
-  const miVotoGuardado = obtenerVotosRealizados()[destino?.id]; 
+  const miVotoGuardado = obtenerVotosRealizados()[destino?.id];
   const yaVoto = !!miVotoGuardado;
   const destinoMostrado = destinoLocal || destino;
   const guardado = destinoMostrado ? esFavorito(destinoMostrado.id) : false;
 
   const handleVotar = async (puntaje) => {
-    if (!destinoMostrado) return;
     setVotando(true);
     setMensajeVoto(null);
     try {
@@ -75,7 +71,6 @@ const Detalles = () => {
   };
 
   const handleDescargarPDF = async () => {
-    if (!destinoMostrado) return;
     setGenerando(true);
     setEstadoPDF(null);
     try {
@@ -91,7 +86,6 @@ const Detalles = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
-      {/* BOTÓN VOLVER */}
       <button
         onClick={() => navigate("/")}
         className="flex items-center gap-2 text-gray-400 hover:text-gray-700 text-sm mb-8 transition-colors group"
@@ -101,7 +95,6 @@ const Detalles = () => {
       </button>
 
       <div className="flex flex-col lg:flex-row gap-10">
-        {/* COLUMNA IZQUIERDA */}
         <div className="lg:w-1/2">
           <div className="relative rounded-2xl overflow-hidden shadow-md">
             <img
@@ -116,7 +109,6 @@ const Detalles = () => {
           </div>
         </div>
 
-        {/* COLUMNA DERECHA */}
         <div className="lg:w-1/2 flex flex-col gap-6">
           <div>
             <div className="flex items-start justify-between gap-4 mb-3">
@@ -173,9 +165,7 @@ const Detalles = () => {
           )}
 
           <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-600 mb-4">
-              {yaVoto ? t('detalles.calificacion_guardada') : t('detalles.da_tu_opinion')}
-            </p>
+            <p className="text-sm font-semibold text-gray-600 mb-4">{yaVoto ? t('detalles.calificacion_guardada') : t('detalles.da_tu_opinion')}</p>
             <SelectorEstrellas
               puntajeActual={miVotoGuardado || destinoMostrado?.calificacion}
               onVotar={handleVotar}
@@ -183,7 +173,6 @@ const Detalles = () => {
             />
           </div>
 
-          {/* ACCESIBILIDAD - Con validación de existencia para evitar error de .map */}
           {destinoMostrado?.accesibilidad && (
             <div>
               <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">{t('detalles.accesibilidad')}</h2>
@@ -195,7 +184,6 @@ const Detalles = () => {
             </div>
           )}
 
-          {/* ALOJAMIENTOS - Con validación de existencia */}
           {destinoMostrado?.alojamiento && (
             <div>
               <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">{t('detalles.alojamientos')}</h2>
