@@ -35,5 +35,8 @@
     "postcss": "^8.5.10",
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.9"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "^1.0.0-rc.18"
   }
 }
