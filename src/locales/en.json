@@ -34,11 +34,14 @@
     "da_tu_opinion": "Share your opinion!",
     "voto_enviando": "Sending vote...",
     "voto_exitoso": "Thank you for participating!",
+    "descargar": "Download info",
     "descarga_exitosa": "Info sheet downloaded successfully",
     "accesibilidad": "Accessibility",
     "alojamientos": "Accommodations",
     "volver": "Back to home",
-    "reintentar": "Retry"
+    "reintentar": "Retry",
+    "guardar": "Save",
+    "guardado": "Saved"
     },
     "favoritos": {
         "titulo": "My Favorites",
