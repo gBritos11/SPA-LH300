@@ -21,7 +21,8 @@ const useDestinoId = (id) => {
 
                 setDestino(datos);
             } catch (err){
-                setError(err.message)
+                setError(err.message);
+                setDestino(null);
             } finally {
                 setCargando(false);
             }
