@@ -4,7 +4,7 @@ import ModalUsuario from "./componentes/ModalUsuario/ModalUsuario";
 
 import { Routes, Route } from "react-router-dom";
 import { BarraNavegacion } from "./componentes/BarraNavegacion/BarraNavegacion";
-import { FavoritosProvider } from "./contextos/entornoFavoritos";
+import { FavoritosProvider } from "./context/entornoFavoritos";
 import Pie from "./componentes/Pie/Pie";
 import Inicio from './paginas/Inicio';
 import Detalles from "./paginas/Detalles";

@@ -5,6 +5,10 @@
         "idioma": "Idioma",
         "hola": "Hola"
     },
+    "banner": {
+        "titulo": "Explorá el Mundo",
+        "subtitulo": "Descubrí tu próximo destino"
+    },
     "buscador": {
         "placeholder": "Buscar destinos...",
         "filtro_todos": "Todos",
