@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDestinos } from "../Servicios/api";
+import { getDestinos } from "../servicios/api";
 
 const useRanking = () => {
     const [ranking, setRanking] = useState([]);

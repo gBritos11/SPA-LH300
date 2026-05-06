@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDestinoById } from "../Servicios/api";
+import { getDestinoById } from "../servicios/api";
 
 const useDestinoId = (id) => {
     //Usamos tres useStates uno por cada estado
