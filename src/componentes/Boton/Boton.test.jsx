@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, userEvent} from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Boton from './Boton';
 
@@ -9,22 +9,25 @@ describe('Pruebas en <Boton />', () => {
         expect(screen.getByText('Click aquí')).toBeInTheDocument();
     });
 
-    it('debería llamar a la función onClick al hacer clic', () => {
+    it('debería llamar a la función onClick al hacer clic', async () => { //userEvent es asincrona
+        const user = userEvent.setup(); //crea una instancia del usuario simulada y mantiene el estado entre acciones
+
         const fnSimulada = vi.fn();
         render(<Boton onClick={fnSimulada}>Enviar</Boton>);
-        
-        const boton = screen.getByRole('button');
-        fireEvent.click(boton);
 
+        const boton = screen.getByRole('button');
+        await user.click(boton);
+        //await xq userEvent simula eventos reales asincronos. sin await, el test terminaria antes de que el click se procese.
+        
         expect(fnSimulada).toHaveBeenCalledTimes(1);
     });
 
-    it('debería aplicar clases de CSS según la variante (ej: primary)', () => {
-        const { container } = render(<Boton variante="primary">Botón Azul</Boton>);
-        
-        // Aca verificamos si el botón tiene alguna clase que esperas
-        const boton = container.firstChild;
-        expect(boton).toHaveClass('rounded-xl');
+    it('debería renderizar un button cuando no recibe la prop to', () => {
+        render(<Boton onClick={() => {}}>Enviar</Boton>);
+
+        const boton = screen.getByRole('button'); //verficamos que cuando no hay un prop "to", el componente renderiza un boton y no un <a>
+
+        expect(boton).toBeInTheDocument();
     });
 
     it('debería renderizar el icono si se le pasa como prop', () => {
