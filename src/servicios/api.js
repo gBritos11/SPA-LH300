@@ -1,6 +1,6 @@
 
 {/* URL de MockAPI. Es el unico lugar de toda la app donde esta url existe. Si ma;ana cambia la modificamos aca y el resto de la app sigue funcionando si tocas nada mas */}
-const API_URL = `http://localhost:3000`;
+const API_URL = import.meta.env.VITE_API_URL;
 
 {/* Esta función NO se exporta — es de uso interno del archivo. */}
 {/* Su trabajo es hacer el fetch y manejar los errores comunes */}
