@@ -1,13 +1,13 @@
 
 {/* URL de MockAPI. Es el unico lugar de toda la app donde esta url existe. Si ma;ana cambia la modificamos aca y el resto de la app sigue funcionando si tocas nada mas */}
-const BASE_URL = `https://69e933af55d62f34797a51fc.mockapi.io`;
+const API_URL = `http://localhost:3000`;
 
 {/* Esta función NO se exporta — es de uso interno del archivo. */}
 {/* Su trabajo es hacer el fetch y manejar los errores comunes */}
 {/* para no repetir ese código en cada función pública. */}
 
 const fetchData = async (endpoint) => {
-    const respuesta = await fetch(`${BASE_URL}${endpoint}`);
+    const respuesta = await fetch(`${API_URL}${endpoint}`);
 
     if (respuesta.status === 404) {
         return []; 
@@ -29,11 +29,11 @@ export const getDestinos = async (busqueda = '', pagina = 1, limite = 9, campo='
         consulta += `&${campo}=${busqueda}`;
     }
 
-    return fetchData(`/destino${consulta}`);
+    return fetchData(`/api/destinos${consulta}`);
 }
 
 {/* Trae un destino específico por su ID */}
 {/* Uso: const destino = await getDestinoById(1) */}
 export const getDestinoById = async (id) => {
-    return fetchData(`/destino/${id}`);
+    return fetchData(`/api/destinos/${id}`);
 }
