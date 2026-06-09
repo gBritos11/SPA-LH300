@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, userEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Busqueda from './Busqueda';
 
@@ -27,7 +27,8 @@ describe('Pruebas en <Busqueda />', () => {
     expect(input.value).toBe('Bariloche');
   });
 
-  it('2. Debería llamar a onChange cuando el usuario escribe', () => {
+  it('2. Debería llamar a onChange cuando el usuario escribe', async () => {
+    const user = userEvent.setup();
     render(
       <Busqueda 
         valor="" 
@@ -38,14 +39,16 @@ describe('Pruebas en <Busqueda />', () => {
     );
 
     const input = screen.getByRole('textbox');
-    
-    // Simulamos que el usuario escribe "Neuquén"
-    fireEvent.change(input, { target: { value: 'Neuquén' } });
+    await user.type(input, 'Neuquén');//user.type simula que el usuario tipea letra por letra
+    //dispara keydown, keypress, input, keyup por cada carácter.
 
-    expect(mockOnChange).toHaveBeenCalledWith('Neuquén');
+    expect(mockOnChange).toHaveBeenCalled();
+    //Usamos toHaveBeenCalled() en vez de toHaveBeenCalledWith('Neuquén')
+    //porque user.type llama onChange por cada letra, no con el string completo.
   });
 
-  it('3. Debería llamar a onCampoChange cuando se cambia el criterio de búsqueda', () => {
+  it('3. Debería llamar a onCampoChange cuando se cambia el criterio de búsqueda', async () => {
+    const user = userEvent.setup();
     render(
       <Busqueda 
         valor="" 
@@ -57,10 +60,10 @@ describe('Pruebas en <Busqueda />', () => {
 
     // Buscamos el select (combobox)
     const select = screen.getByRole('combobox');
-    
-    // Simulamos que el usuario elige buscar por "pais"
-    fireEvent.change(select, { target: { value: 'pais' } });
-
+    await user.selectOptions(select, 'pais');
+    //user.selectOptions es el equivalente de userEvent para selects.
+    //Simula abrir el dropdown y elegir una opción.
+   
     expect(mockOnCampoChange).toHaveBeenCalledWith('pais');
   });
 });

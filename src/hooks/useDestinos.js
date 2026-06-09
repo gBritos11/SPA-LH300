@@ -24,7 +24,7 @@ const useDestinos = (filtro = '', campoFiltro = 'search') => {
 
                 const datos = await getDestinos(filtro, pagina, LIMIT, campoFiltro);
                 
-                setTieneMas(datos.length === LIMIT);
+                setTieneMas(datos.length >= LIMIT);
                 setDestinos(prev => (pagina === 1 ? datos : [...prev, ...datos]));
                 setError(null);
             } catch (err) {

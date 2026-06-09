@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, userEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Tarjeta from './Tarjeta';
 import { FavoritosProvider } from '../../context/entornoFavoritos'; 
@@ -58,7 +58,8 @@ describe('Pruebas en <Tarjeta />', () => {
     expect(screen.getByAltText('San Martín de los Andes')).toBeInTheDocument();
   });
 
-  it('2. Debería ejecutar la función action cuando el usuario hace clic en Ver más', () => {
+  it('2. Debería ejecutar la función action cuando el usuario hace clic en Ver más', async () => {
+    const user = userEvent.setup();
     render(
       <FavoritosProvider>
         <Tarjeta destino={destinoMock} action={mockAction} />
@@ -66,7 +67,7 @@ describe('Pruebas en <Tarjeta />', () => {
     );
     
     const botonVerMas = screen.getByText('Ver más');
-    fireEvent.click(botonVerMas);
+    await user.click(botonVerMas)
 
     expect(mockAction).toHaveBeenCalledTimes(1);
   });

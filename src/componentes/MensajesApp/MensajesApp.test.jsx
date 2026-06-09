@@ -16,19 +16,11 @@ describe('MensajesApp', () => {
     /* Esta fn agrupa todos los test de este componente */
 
     /* TEST 1 */
-    it('muestra el spinner cuando el tipo es cargando', () => {
-        const {container} = render(<MensajesApp tipo="cargando" />);
-        /* Render() -> monta el comp. y devuelve un obj */
-        /* Container es el div raiz contiene TODO el HTML Renderizado */
-        /* Lo desestructuramos para buscar elementos por clase CSS */
+    it('muestra el mensaje de carga cuando el tipo es cargando', () => {
+        render(<MensajesApp tipo='cargando'/>);
 
-        const spinner = container.querySelector('.animate-spin');
-        /* msjApp renderiza un div con esa clase cuando tipo="cargando" */
-        /* Si no existe devuelve null */
-
-        expect(spinner).toBeInTheDocument();
-        //toBeInTheDocument() es un matcher de jest-dom
-        //Si spinner es null, el test falla con un msj claro
+        expect(screen.getByText('mensajes.cargando')).toBeInTheDocument();
+        //Si el componente deja de llamar a t() en ese caso, el test falla -> correcto. Si solo cambiamos la clase CSS del spiner, el test sigue pasando -> tambien correcto
     });
 
     /* TEST 2 */
