@@ -9,10 +9,10 @@ const Tarjeta = ({ destino, action, tipo = "destino" }) => {
 
   const { 
     imagen = 'https://picsum.photos/400/300',
-    nombre = 'Sin nombre',
-    descripcion = 'Sin descripción disponible',
-    presupuesto = 0,
-    pais = 'desconocido'
+    name: nombre = 'Sin nombre',
+    description: descripcion = 'Sin descripción disponible',
+    budget: presupuesto = 0,
+    country: pais = 'desconocido'
   } = destino;
 
   const cardClasses =

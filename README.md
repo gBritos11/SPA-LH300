@@ -50,3 +50,57 @@ Ejemplo para crear una nueva rama para empezar una tarea: git checkout -b 'tarea
     -> Aceptar el Merge: Una vez aprobado, el PM o el autor hace clic en "Squash and merge".
 
     ->Actualizar local: Todos los demás deben hacer git pull origin develop para tener lo nuevo.
+
+
+### Agregamos Testing
+
+# documentación oficial de las herramientas recomendadas por la catedra.
+Vitest -> https://vitest.dev/
+React Testing Library -> https://testing-library.com/docs/react-testing-library/intro/
+jest-dom -> https://testing-library.com/docs/ecosystem-jest-dom/
+user-event -> https://testing-library.com/docs/user-event/intro/
+
+#| Librería | Versión | Para qué sirve |
+|---|---|---|
+| `vitest` | ^4.1.6 | Runner de tests compatible con Vite. Reemplaza a Jest pero con la misma API |
+| `@testing-library/react` | ^16.3.2 | Renderiza componentes React en un DOM simulado para poder testearlos |
+| `@testing-library/jest-dom` | ^6.9.1 | Agrega matchers como `toBeInTheDocument()` para verificar elementos del DOM |
+| `@testing-library/user-event` | ^14.6.1 | Simula acciones reales del usuario como clicks y escritura |
+| `jsdom` | ^29.1.1 | Simula el navegador (DOM) en Node.js para que los tests puedan correr |
+
+
+### Configuración
+
+**`vite.config.js`** — Vitest se configura dentro del mismo archivo de Vite:
+```js
+test: {
+    globals: true,          // permite usar describe/it/expect sin importarlos
+    environment: 'jsdom',   // simula el navegador
+    setupFiles: './src/setupTests.js'  // archivo que corre antes de cada test
+}
+```
+
+**`src/setupTests.js`** — Se ejecuta antes de cada test e importa los matchers de jest-dom:
+```js
+import '@testing-library/jest-dom';
+```
+
+---
+
+### Cómo ejecutar los tests
+
+```bash
+# Modo watch: re-corre los tests automáticamente al guardar un archivo
+npm run test
+
+# Ejecución única: corre todos los tests una sola vez y termina
+npm run test:run
+
+# Correr un archivo de test específico
+npx vitest run src/componentes/Boton/Boton.test.jsx
+```
+
+---
+
+
+

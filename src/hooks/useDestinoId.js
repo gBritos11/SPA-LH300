@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDestinoById } from "../Servicios/api";
+import { getDestinoById } from "../servicios/api";
 
 const useDestinoId = (id) => {
     //Usamos tres useStates uno por cada estado
@@ -21,7 +21,8 @@ const useDestinoId = (id) => {
 
                 setDestino(datos);
             } catch (err){
-                setError(err.message)
+                setError(err.message);
+                setDestino(null);
             } finally {
                 setCargando(false);
             }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDestinos } from "../Servicios/api";
+import { getDestinos } from "../servicios/api";
 
 const LIMIT = 9;
 
@@ -24,7 +24,7 @@ const useDestinos = (filtro = '', campoFiltro = 'search') => {
 
                 const datos = await getDestinos(filtro, pagina, LIMIT, campoFiltro);
                 
-                setTieneMas(datos.length === LIMIT);
+                setTieneMas(datos.length >= LIMIT);
                 setDestinos(prev => (pagina === 1 ? datos : [...prev, ...datos]));
                 setError(null);
             } catch (err) {
