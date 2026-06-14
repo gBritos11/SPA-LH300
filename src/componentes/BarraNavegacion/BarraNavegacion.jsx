@@ -1,5 +1,6 @@
+// Importaciones
 import { NavLink } from "react-router-dom";
-import { Heart, User } from "lucide-react";
+import { Heart, User, LogOut } from "lucide-react";
 import logoImg from "./../../assets/logo.png";
 import { useContext } from "react";
 import { UsuarioContext } from "../../context/UsuarioContext";
@@ -7,7 +8,7 @@ import useFavoritos from "./../../hooks/useFavoritos";
 import { useTranslation } from 'react-i18next';
 
 export const BarraNavegacion = () => {
-    const { usuario } = useContext(UsuarioContext);
+    const { usuario, logout } = useContext(UsuarioContext);
     const { favoritos } = useFavoritos();
     const { t, i18n } = useTranslation();
 
@@ -18,59 +19,49 @@ export const BarraNavegacion = () => {
 
     return (
         <nav className="sticky top-0 z-50 w-full bg-[#0a1628] border-b border-white/10 shadow-lg backdrop-blur-sm">
-            <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+            <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+                
+                {/* Logo */}
+                <div className="flex-1">
+                    <NavLink to="/" className="flex items-center">
+                        <img src={logoImg} alt="Logo" className="h-12 w-auto" />
+                    </NavLink>
+                </div>
 
-                {/* LOGO */}
-                <NavLink to="/" className="flex items-center">
-                    <img 
-                        src={logoImg} 
-                        alt="TravelHub Logo" 
-                        className="h-12 w-auto object-contain hover:opacity-80 transition-opacity" 
-                    />
-                </NavLink>
+                {/* Saludo Centrado */}
+                <div className="flex-1 flex justify-center">
+                    {usuario && (
+                        <div className="flex items-center gap-3 text-white/80 text-sm bg-white/5 px-4 py-1.5 rounded-full border border-white/10">
+                            <User size={16} />
+                            <span>{t('navbar.hola')}, <span className="text-orange-400 font-bold">{usuario.username}</span></span>
+                        </div>
+                    )}
+                </div>
 
-                {/* SALUDO */}
-                {usuario && (
-                    <div className="flex items-center gap-2 text-white/60 text-sm">
-                        <User size={16} />
-                        <span>{t('navbar.hola')}, <span className="text-white font-medium">{usuario}</span></span>
-                    </div>
-                )}
+                {/* Acciones (Derecha) */}
+                <div className="flex-1 flex justify-end items-center gap-6">
+                    {/* logout */}
+                    <button onClick={logout} className="text-white/70 hover:text-white"><LogOut size={24} /></button>
 
-                {/* ACCIONES */}
-                <div className="flex items-center gap-6">
-
-                    {/* TOGGLE IDIOMA */}
+                    {/* Toggle Switch */}
                     <button 
                         onClick={cambiarIdioma}
-                        className="text-white/70 hover:text-white text-sm font-medium tracking-widest transition-colors"
+                        className="relative flex items-center justify-between w-16 h-8 px-1 bg-gray-700 rounded-full transition-colors hover:bg-gray-600 focus:outline-none"
                     >
-                        {i18n.language === 'es' ? 'EN' : 'ES'}
+                        {/* Fondo deslizante */}
+                        <div className={`absolute left-1 w-6 h-6 bg-white rounded-full transition-transform duration-300 transform ${i18n.language === 'en' ? 'translate-x-8' : 'translate-x-0'}`}></div>
+                        
+                        {/* Etiquetas */}
+                        <span className="text-[10px] font-bold text-white z-10 ml-1">ES</span>
+                        <span className="text-[10px] font-bold text-white z-10 mr-1">EN</span>
                     </button>
 
-                    {/* FAVORITOS */}
-                    <NavLink 
-                        to="/favoritos" 
-                        className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
-                    >
-                        {({ isActive }) => (
-                            <>
-                                <div className="relative">
-                                    <Heart 
-                                        size={20} 
-                                        className={isActive ? "fill-orange-400 text-orange-400" : "stroke-current"} 
-                                    />
-                                    {favoritos.length > 0 && (
-                                        <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                                            {favoritos.length}
-                                        </span>
-                                    )}
-                                </div>
-                                <span className="hidden sm:inline text-sm font-medium">
-                                    {t('navbar.favoritos')}
-                                </span>
-                            </>
-                        )}
+                    {/* Favoritos */}
+                    <NavLink to="/favoritos" className="text-white/70 hover:text-white transition-colors">
+                        <div className="relative">
+                            <Heart size={24} />
+                            {favoritos.length > 0 && <span className="absolute -top-2 -right-2 bg-orange-500 text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{favoritos.length}</span>}
+                        </div>
                     </NavLink>
                 </div>
             </div>

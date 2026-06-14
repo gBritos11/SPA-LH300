@@ -1,39 +1,46 @@
+import axios from 'axios';
 
-{/* URL de MockAPI. Es el unico lugar de toda la app donde esta url existe. Si ma;ana cambia la modificamos aca y el resto de la app sigue funcionando si tocas nada mas */}
-const API_URL = import.meta.env.VITE_API_URL;
+const apiClient = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    withCredentials: true, 
+    headers: { 'Content-Type': 'application/json' }
+});
 
-{/* Esta función NO se exporta — es de uso interno del archivo. */}
-{/* Su trabajo es hacer el fetch y manejar los errores comunes */}
-{/* para no repetir ese código en cada función pública. */}
+// Interceptor para inyectar token
+apiClient.interceptors.request.use((config) => {
+    const token = sessionStorage.getItem('accessToken');
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
 
-const fetchData = async (endpoint) => {
-    const respuesta = await fetch(`${API_URL}${endpoint}`);
+// Interceptor para el REFRESH TOKEN AUTOMÁTICO
+apiClient.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
 
-    if (respuesta.status === 404) {
-        return []; 
+        // Si el error es 401 y no es un reintento
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            
+            try {
+                const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/refresh`, {}, { withCredentials: true });
+
+                // Guardamos el nuevo token
+                sessionStorage.setItem('accessToken', data.accessToken);
+
+                // Reintentamos la petición original
+                return apiClient(originalRequest);
+                
+            } catch (refreshError) {
+                // Si el refresco falla, el Refresh Token también expiró.
+                // Limpiamos todo y recargamos para forzar el logout.
+                sessionStorage.removeItem('accessToken');
+                return Promise.reject(refreshError);
+            }
+        }
+        return Promise.reject(error);
     }
-    
-    if (!respuesta.ok) {
-        throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
-    }
-    return respuesta.json();
-}
+);
 
-
-{/* Trae el listado completo de destinos */}
-{/* Uso: const destinos = await getDestinos() */}
-{/* nuevo parametro campo (default 'search') campo = el nombre de la query param que se usar en la url. SI nadie lo pasa usa search en el campo generico */}
-export const getDestinos = async (busqueda = '', pagina = 1, limite = 9, campo='search') => {
-    let consulta = `?page=${pagina}&limit=${limite}`;
-    if (busqueda){
-        consulta += `&${campo}=${busqueda}`;
-    }
-
-    return fetchData(`/api/destinos${consulta}`);
-}
-
-{/* Trae un destino específico por su ID */}
-{/* Uso: const destino = await getDestinoById(1) */}
-export const getDestinoById = async (id) => {
-    return fetchData(`/api/destinos/${id}`);
-}
+export default apiClient;
