@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDestinos } from "../servicios/api";
+import { getDestinos } from "../servicios/destino.service.js";
 
 const LIMIT = 9;
 
