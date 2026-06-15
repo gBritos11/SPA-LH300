@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDestinos } from "../servicios/api";
+import { getDestinos } from "../servicios/destino.service.js";
 
 const useRanking = () => {
     const [ranking, setRanking] = useState([]);
@@ -10,7 +10,7 @@ const useRanking = () => {
             try {
        
                 //Traemos todos los destinos limit=100 no treamos solo 9 porque ordenariamos los de 1 sola pag
-                const datos = await getDestinos('', 1, 100);
+                const {data} = await apiClient.get('/destinos/ranking');
 
                 //Ordenamos de mayor a menor y nos quedamos con 10
                 const top10 = datos

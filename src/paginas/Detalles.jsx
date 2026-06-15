@@ -1,23 +1,26 @@
+// Realizo importaciones
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import useDestinoId from '../hooks/useDestinoId';
 import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
 import Boton from "../componentes/Boton/Boton";
 import { generarPDF } from '../servicios/pdfService';
-import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 import SelectorEstrellas from "../componentes/SelectorEstrellas/SelectorEstrellas";
 import { votarDestino } from "../servicios/votacionService";
-import { Download, Loader2, CheckCircle, ArrowLeft, MapPin, Heart } from "lucide-react";
+import { ArrowLeft, MapPin, Heart } from "lucide-react"; // Importamos Heart
 import { useTranslation } from 'react-i18next';
-import useFavoritos from '../hooks/useFavoritos';
+import { useFavoritos } from '../context/entornoFavoritos'; // IMPORTACIÓN CORREGIDA
 
 const Detalles = () => {
   const { id } = useParams();
   const { destino, cargando, error } = useDestinoId(id);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { esFavorito, validacionFavorito } = useFavoritos();
+  
+  // Usamos el contexto de favoritos
+  const { esFavorito, toggleFavorito } = useFavoritos();
 
+  // Inicializo estados
   const [destinoLocal, setDestinoLocal] = useState(null);
   const [votando, setVotando] = useState(false);
   const [generando, setGenerando] = useState(false);
@@ -32,7 +35,6 @@ const Detalles = () => {
   if (cargando) return <MensajesApp tipo="cargando" />;
   if (!destino || Object.keys(destino).length === 0) return null;
 
-  // Normalización de datos para que el componente consuma lo que viene de la API
   const destinoMostrado = destinoLocal || destino;
   const datosDestino = {
     id: destinoMostrado.id,
@@ -51,17 +53,17 @@ const Detalles = () => {
   const obtenerVotosRealizados = () => JSON.parse(localStorage.getItem('misVotosPuntajes') || '{}');
   const miVotoGuardado = obtenerVotosRealizados()[datosDestino.id];
   const yaVoto = !!miVotoGuardado;
-  const guardado = esFavorito(datosDestino.id);
+  
+  // Verificamos si es favorito usando la función del contexto
+  const isFav = esFavorito(datosDestino.id);
 
   const handleVotar = async (puntaje) => {
     setVotando(true);
     try {
-      const actualizado = await votarDestino(destinoMostrado, puntaje);
-      const votosActuales = obtenerVotosRealizados();
-      localStorage.setItem('misVotosPuntajes', JSON.stringify({ ...votosActuales, [datosDestino.id]: puntaje }));
-      setDestinoLocal(actualizado);
+      const destinoActualizado = await votarDestino(datosDestino.id, puntaje);
+      setDestinoLocal(destinoActualizado); 
     } catch (err) {
-      console.error('Error al votar:', err);
+      toast.error(t('detalles.error_voto'));
     } finally {
       setVotando(false);
     }
@@ -98,9 +100,23 @@ const Detalles = () => {
         </div>
 
         <div className="lg:w-1/2 flex flex-col gap-6">
-          <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{datosDestino.nombre}</h1>
-          <p className="text-gray-500 leading-relaxed">{datosDestino.descripcion}</p>
+          <div className="flex justify-between items-start">
+            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{datosDestino.nombre}</h1>
+            
+            {/* BOTÓN DE FAVORITOS INTEGRADO */}
+            <button 
+                onClick={() => toggleFavorito(datosDestino)}
+                className="p-3 rounded-full hover:bg-gray-100 transition-colors"
+            >
+                <Heart 
+                    className={isFav ? "fill-orange-500 text-orange-500" : "text-gray-400"} 
+                    size={28} 
+                />
+            </button>
+          </div>
 
+          <p className="text-gray-500 leading-relaxed">{datosDestino.descripcion}</p>
+          
           <div className="flex items-center gap-4">
             <div className="bg-orange-50 rounded-2xl px-6 py-4 flex-1 text-center">
               <p className="text-xs text-orange-400 uppercase tracking-widest font-medium mb-1">{t('detalles.presupuesto')}</p>

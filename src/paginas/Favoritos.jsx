@@ -1,6 +1,6 @@
-import useFavoritos from "../hooks/useFavoritos";
+// Importaciones
+import { useFavoritos } from "../context/entornoFavoritos";
 import Tarjeta from "../componentes/Tarjeta/Tarjeta";
-import { useNavigate } from "react-router-dom";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp";
 import { useState } from 'react';
 import Busqueda from '../componentes/Busqueda/Busqueda';
@@ -9,32 +9,35 @@ import { Heart } from 'lucide-react';
 
 const Favoritos = () => {
   const { favoritos } = useFavoritos();
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
+  // Inicializo estados
   const [filtro, setFiltro] = useState('');
   const [campoFiltro, setCampoFiltro] = useState('search');
 
-  const filtrados = favoritos.filter((destino) => {
+  // Accedo a favoritos
+  const filtrados = favoritos.filter((fav) => {
+    const destino = fav.destination;
+    if (!destino) return false;
+
     const criterio = filtro.toLowerCase();
     if (!filtro) return true;
+    
     switch (campoFiltro) {
-      case 'pais': return destino.pais?.toLowerCase().includes(criterio);
-      case 'ubicacion': return destino.ubicacion?.toLowerCase().includes(criterio);
-      case 'descripcion': return destino.descripcion?.toLowerCase().includes(criterio);
+      case 'pais': return destino.country?.toLowerCase().includes(criterio);
+      case 'ubicacion': return destino.location?.toLowerCase().includes(criterio);
+      case 'descripcion': return destino.description?.toLowerCase().includes(criterio);
       default:
         return (
-          destino.nombre?.toLowerCase().includes(criterio) ||
-          destino.pais?.toLowerCase().includes(criterio) ||
-          destino.descripcion?.toLowerCase().includes(criterio)
+          destino.name?.toLowerCase().includes(criterio) ||
+          destino.country?.toLowerCase().includes(criterio) ||
+          destino.description?.toLowerCase().includes(criterio)
         );
     }
   });
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
-
-        {/* ENCABEZADO */}
         <div className="mb-10 flex items-center gap-3">
             <div className="p-3 bg-orange-50 rounded-xl">
                 <Heart size={22} className="text-orange-500" />
@@ -49,7 +52,6 @@ const Favoritos = () => {
             </div>
         </div>
 
-        {/* BUSCADOR */}
         <div className="mb-10 flex justify-center">
             <Busqueda
                 valor={filtro} 
@@ -59,7 +61,6 @@ const Favoritos = () => {
             />
         </div>
 
-        {/* GRILLA */}
         {filtrados.length === 0 ? (
             <MensajesApp
                 tipo="vacio"
@@ -71,11 +72,11 @@ const Favoritos = () => {
             />
         ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filtrados.map((destino) => (
+                {filtrados.map((fav) => (
                     <Tarjeta
-                        key={destino.id}
-                        destino={destino}
-                        action={() => navigate(`/destino/${destino.id}`)}
+                        key={fav.destinationId}
+                        destino={fav.destination}
+                        action={() => window.location.href = `/destino/${fav.destinationId}`}
                     />
                 ))}
             </div>
