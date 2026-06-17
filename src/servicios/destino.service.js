@@ -1,27 +1,12 @@
 import apiClient from './api';
 
-    export const getDestinos = async (
-        pagina = 1, 
-        limite = 9, 
-        filtro = '', 
-        campo = 'search'
-    ) => {
-    
-    let params = new URLSearchParams({
-            page: pagina,
-            limit: limite,
-            filtro: filtro,
-            campo: campo
-        });
-
-        const { data } = await apiClient.get(
-            `/destinos?${params.toString()}`
-        );
-
-        return data;
+export const getDestinos = async (busqueda = '', pagina = 1, limite = 9, campo = 'search', lang = 'es') => {
+    let consulta = `?page=${pagina}&limit=${limite}&lang=${lang}`;
+    if (busqueda) {
+        consulta += `&${campo}=${busqueda}`;
     }
 
-export const getDestinoById = async (id) => {
-    const { data } = await apiClient.get(`/destinos/${id}`);
+export const getDestinoById = async (id, lang='es') => {
+    const { data } = await apiClient.get(`/destinos/${id}?lang=${lang}`);
     return data;
 }
