@@ -8,12 +8,15 @@ const Tarjeta = ({ destino, action, tipo = "destino" }) => {
   if (!destino) return null;
 
   const { 
-    imagen = 'https://picsum.photos/400/300',
+    images,
     name: nombre = 'Sin nombre',
     description: descripcion = 'Sin descripción disponible',
     budget: presupuesto = 0,
     country: pais = 'desconocido'
   } = destino;
+
+  const imagen =
+  images?.[0]?.url || 'https://picsum.photos/400/300';
 
   const cardClasses =
     tipo === "destino"
