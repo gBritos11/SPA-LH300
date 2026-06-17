@@ -40,9 +40,15 @@ export const BarraNavegacion = () => {
 
                 {/* Acciones (Derecha) */}
                 <div className="flex-1 flex justify-end items-center gap-6">
-                    {/* logout */}
-                    <button onClick={logout} className="text-white/70 hover:text-white"><LogOut size={24} /></button>
 
+                    {/* Favoritos */}
+                    <NavLink to="/favoritos" className="text-white/70 hover:text-white transition-colors">
+                        <div className="relative">
+                            <Heart size={24} />
+                            {favoritos.length > 0 && <span className="absolute -top-2 -right-2 bg-orange-500 text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{favoritos.length}</span>}
+                        </div>
+                    </NavLink>
+                    
                     {/* Toggle Switch */}
                     <button 
                         onClick={cambiarIdioma}
@@ -56,13 +62,9 @@ export const BarraNavegacion = () => {
                         <span className="text-[10px] font-bold text-white z-10 mr-1">EN</span>
                     </button>
 
-                    {/* Favoritos */}
-                    <NavLink to="/favoritos" className="text-white/70 hover:text-white transition-colors">
-                        <div className="relative">
-                            <Heart size={24} />
-                            {favoritos.length > 0 && <span className="absolute -top-2 -right-2 bg-orange-500 text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{favoritos.length}</span>}
-                        </div>
-                    </NavLink>
+                    {/* logout */}
+                    <button onClick={logout} className="text-white/70 hover:text-white"><LogOut size={24} /></button>
+
                 </div>
             </div>
         </nav>

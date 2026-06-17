@@ -9,7 +9,7 @@ export const getDestinos = async (busqueda = '', pagina = 1, limite = 9, campo =
     return data;
 }
 
-export const getDestinoById = async (id, lang='es') => {
+export const getDestinoById = async (id, lang = 'es') => {
     const { data } = await apiClient.get(`/destinos/${id}?lang=${lang}`);
     return data;
 }

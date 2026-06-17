@@ -56,7 +56,8 @@ export const UsuarioProvider = ({ children }) => {
       sessionStorage.removeItem("accessToken");
       setUsuario(null);
     } catch (error) {
-      toast.error("Error al cerrar sesión", error);
+      toast.error("Error al cerrar sesión");
+      console.error(error);
     }
   };
 
