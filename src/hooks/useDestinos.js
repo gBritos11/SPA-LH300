@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { getDestinos } from "../servicios/destino.service.js";
+import { useTranslation } from "react-i18next";
 
 const LIMIT = 9;
 
 const useDestinos = (filtro = '', campoFiltro = 'search') => {
     const { i18n } = useTranslation();
-
+    
     const [destinos, setDestinos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [cargandoMas, setCargandoMas] = useState(false);
@@ -22,15 +22,16 @@ const useDestinos = (filtro = '', campoFiltro = 'search') => {
     useEffect(() => {
         const fetchDestinos = async () => {
             try {
+                // Solo mostramos el spinner principal si es la primera página
                 if (pagina === 1) {
                     setLoading(true);
-                    setDestinos([]);
+                    setDestinos([]); // Limpiamos para la nueva búsqueda
                 } else {
                     setCargandoMas(true);
                 }
 
                 const datos = await getDestinos(filtro, pagina, LIMIT, campoFiltro, i18n.language);
-
+                
                 setTieneMas(datos.length >= LIMIT);
                 setDestinos(prev => (pagina === 1 ? datos : [...prev, ...datos]));
                 setError(null);
