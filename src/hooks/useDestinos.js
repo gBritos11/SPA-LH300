@@ -19,6 +19,15 @@ const useDestinos = (filtro = '', campoFiltro = 'search') => {
         setPagina(1);
     }, [i18n.language, filtro, campoFiltro]);
 
+    useEffect(() => {
+        const fetchDestinos = async () => {
+            try {
+                // Solo mostramos el spinner principal si es la primera página
+                if (pagina === 1) {
+                    setLoading(true);
+                    setDestinos([]); // Limpiamos para la nueva búsqueda
+                } else {
+                    setCargandoMas(true);
                 }
 
                 const datos = await getDestinos(filtro, pagina, LIMIT, campoFiltro, i18n.language);
