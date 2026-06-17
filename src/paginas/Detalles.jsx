@@ -10,13 +10,15 @@ import { votarDestino } from "../servicios/votacionService";
 import { ArrowLeft, MapPin, Heart } from "lucide-react"; // Importamos Heart
 import { useTranslation } from 'react-i18next';
 import { useFavoritos } from '../context/entornoFavoritos'; // IMPORTACIÓN CORREGIDA
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Detalles = () => {
   const { id } = useParams();
   const { destino, cargando, error } = useDestinoId(id);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  
+ 
   // Usamos el contexto de favoritos
   const { esFavorito, toggleFavorito } = useFavoritos();
 
@@ -25,6 +27,9 @@ const Detalles = () => {
   const [votando, setVotando] = useState(false);
   const [generando, setGenerando] = useState(false);
   const [estadoPDF, setEstadoPDF] = useState(null);
+
+  const data = destinoLocal ? destinoLocal : destino;
+  const yaVoto = data?.userVote != null;
 
   useEffect(() => {
     if (!cargando && (error || !destino || Object.keys(destino).length === 0)) {
@@ -35,44 +40,80 @@ const Detalles = () => {
   if (cargando) return <MensajesApp tipo="cargando" />;
   if (!destino || Object.keys(destino).length === 0) return null;
 
-  const destinoMostrado = destinoLocal || destino;
   const datosDestino = {
-    id: destinoMostrado.id,
-    nombre: destinoMostrado.name,
-    descripcion: destinoMostrado.description,
-    ubicacion: destinoMostrado.location,
-    pais: destinoMostrado.country,
-    presupuesto: destinoMostrado.budget,
-    calificacion: destinoMostrado.rating || 0,
-    cantidadVotos: destinoMostrado.votes || 0,
-    imagen: destinoMostrado.image || 'https://picsum.photos/400/300',
-    accesibilidad: destinoMostrado.accessibility || [],
-    alojamiento: destinoMostrado.accommodations || []
+    id: data.id,
+    nombre: data.name,
+    descripcion: data.description,
+    ubicacion: data.location,
+    pais: data.country,
+    presupuesto: data.budget,
+    calificacion: data.rating || 0,
+    cantidadVotos: data.votesCount || 0,
+    imagen: data.images?.[0]?.url || 'https://picsum.photos/400/300',
+    accesibilidad: data.accessibility || [],
   };
 
-  const obtenerVotosRealizados = () => JSON.parse(localStorage.getItem('misVotosPuntajes') || '{}');
-  const miVotoGuardado = obtenerVotosRealizados()[datosDestino.id];
-  const yaVoto = !!miVotoGuardado;
-  
   // Verificamos si es favorito usando la función del contexto
   const isFav = esFavorito(datosDestino.id);
 
+  const ratingFormateado = Number(data.rating ?? 0).toFixed(1);
+
   const handleVotar = async (puntaje) => {
+
+    if (votando || yaVoto) return;
+
+    setDestinoLocal({
+        ...data,
+        userVote: puntaje
+    });
+
     setVotando(true);
+
     try {
-      const destinoActualizado = await votarDestino(datosDestino.id, puntaje);
-      setDestinoLocal(destinoActualizado); 
-    } catch (err) {
-      toast.error(t('detalles.error_voto'));
-    } finally {
-      setVotando(false);
+
+        const res = await votarDestino(
+            data.id,
+            Number(puntaje)
+        );
+
+        const destinoActualizado =
+            res?.data?.destination;
+
+        if (!destinoActualizado) {
+            throw new Error("Respuesta inválida");
+        }
+
+        setDestinoLocal({
+            ...data,
+            ...destinoActualizado,
+            userVote: puntaje
+        });
+
+        toast.success("Tu voto fue guardado");
+
+    } catch(error) {
+
+    const msg = error?.response?.data?.error;
+
+    if(msg === "El usuario ya votó este destino") {
+
+        setDestinoLocal({
+            ...data,
+            userVote: data.userVote
+        });
+
     }
-  };
+    toast.error(msg || "Error al votar");
+
+} finally {
+        setVotando(false);
+    }
+};
 
   const handleDescargarPDF = async () => {
     setGenerando(true);
     try {
-      await generarPDF(destinoMostrado);
+      await generarPDF(datosDestino);
       setEstadoPDF('exito');
     } catch (err) {
       setEstadoPDF('error');
@@ -91,17 +132,21 @@ const Detalles = () => {
       <div className="flex flex-col lg:flex-row gap-10">
         <div className="lg:w-1/2">
           <div className="relative rounded-2xl overflow-hidden shadow-md">
-            <img src={datosDestino.imagen} alt={datosDestino.nombre} className="w-full h-[420px] object-cover" />
+              <img 
+                src={data.images?.[0]?.url || 'https://picsum.photos/400/300'}
+                alt={data.name} 
+                className="w-full h-[420px] object-cover"
+              />
             <div className="absolute bottom-4 left-4 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white text-sm px-3 py-1.5 rounded-full">
               <MapPin size={14} />
-              <span>{datosDestino.ubicacion}, {datosDestino.pais}</span>
+              <span>{data.location}, {data.country}</span>
             </div>
           </div>
         </div>
 
         <div className="lg:w-1/2 flex flex-col gap-6">
           <div className="flex justify-between items-start">
-            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{datosDestino.nombre}</h1>
+            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{data.name}</h1>
             
             {/* BOTÓN DE FAVORITOS INTEGRADO */}
             <button 
@@ -115,28 +160,32 @@ const Detalles = () => {
             </button>
           </div>
 
-          <p className="text-gray-500 leading-relaxed">{datosDestino.descripcion}</p>
+          <p className="text-gray-500 leading-relaxed">{data.description}</p>
           
           <div className="flex items-center gap-4">
             <div className="bg-orange-50 rounded-2xl px-6 py-4 flex-1 text-center">
               <p className="text-xs text-orange-400 uppercase tracking-widest font-medium mb-1">{t('detalles.presupuesto')}</p>
-              <p className="text-3xl font-bold text-orange-500">$ {datosDestino.presupuesto}</p>
+              <p className="text-3xl font-bold text-orange-500">$ {data.budget}</p>
             </div>
             <div className="bg-gray-50 rounded-2xl px-6 py-4 flex-1 text-center">
               <p className="text-xs text-gray-400 uppercase tracking-widest font-medium mb-1">{t('detalles.promedio')}</p>
-              <p className="text-3xl font-bold text-gray-800">{datosDestino.calificacion}<span className="text-base font-normal text-gray-400"> / 5</span></p>
+              <p className="text-3xl font-bold text-gray-800">{ratingFormateado}<span className="text-base font-normal text-gray-400"> / 5</span></p>
             </div>
           </div>
 
           <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-            <SelectorEstrellas puntajeActual={miVotoGuardado || datosDestino.calificacion} onVotar={handleVotar} bloqueado={yaVoto || votando} />
+              <SelectorEstrellas
+                  puntajeActual={data.userVote ?? 0}
+                  onVotar={handleVotar}
+                  bloqueado={yaVoto || votando}
+              />
           </div>
 
-          {datosDestino.accesibilidad.length > 0 && (
+          {data.accessibility?.length > 0 && (
             <div>
               <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">{t('detalles.accesibilidad')}</h2>
               <ul className="flex flex-wrap gap-2">
-                {datosDestino.accesibilidad.map((medio, i) => (
+                {data.accessibility?.map((medio, i) => (
                   <li key={i} className="px-4 py-1.5 bg-[#0a1628] text-white rounded-full text-xs font-medium">{medio}</li>
                 ))}
               </ul>

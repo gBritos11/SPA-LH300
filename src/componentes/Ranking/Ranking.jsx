@@ -47,7 +47,7 @@ const Ranking = () => {
 
                             {/* IMAGEN */}
                             <img
-                                src={destino.imagen || 'https://picsum.photos/40/40'}
+                                src={destino.images?.[0]?.url || 'https://picsum.photos/40/40'}
                                 alt={destino.nombre}
                                 className="w-9 h-9 object-cover rounded-lg shrink-0"
                             />
@@ -60,10 +60,10 @@ const Ranking = () => {
                                 <div className="flex items-center gap-1 mt-0.5">
                                     <Star size={10} className="text-orange-400 fill-current" />
                                     <span className="text-xs text-gray-400">
-                                        {destino.calificacion}
-                                        {destino.cantidadVotos > 0 && (
+                                        {Number(destino.rating ?? 0).toFixed(1)}
+                                        {destino.votesCount > 0 && (
                                             <span className="ml-1">
-                                                ({destino.cantidadVotos} {t('ranking.votos')})
+                                                ({destino.votesCount} {t('ranking.votos')})
                                             </span>
                                         )}
                                     </span>

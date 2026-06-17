@@ -26,31 +26,87 @@ const ModalUsuario = ({ onConfirm, onClose }) => {
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
+  const validarFormulario = () => {
+  if (!formData.email.trim()) {
+    return "El email es obligatorio";
+  }
 
-    try {
-      if (isRegistering) {
-        await register(formData);
-        await login({ email: formData.email, password: formData.password });
-      } else {
-        await login({ email: formData.email, password: formData.password });
-      }
-      
-      onConfirm();// Cierro modal
-      navigate("/");// Redirijo a inicio
-    } catch (err) {
+  if (!formData.email.includes("@")) {
+    return "El email no es válido";
+  }
 
-      // Muestro error
-      const errorMessage = err.error || t('modal.errorGeneral');
-      setError(errorMessage);
-      toast.error(err);
-    } finally {
-      setLoading(false);
+  if (!formData.password.trim()) {
+    return "La contraseña es obligatoria";
+  }
+
+  if (formData.password.length < 6) {
+    return "La contraseña debe tener al menos 6 caracteres";
+  }
+
+  if (isRegistering && !formData.username.trim()) {
+    return "El usuario es obligatorio";
+  }
+
+  if (isRegistering && formData.username.length < 3) {
+    return "El usuario debe tener al menos 3 caracteres";
+  }
+
+  return null;
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  console.log("1 - Entró al submit");
+
+  const errorValidacion = validarFormulario();
+
+  if (errorValidacion) {
+    setError(errorValidacion);
+    return;
+  }
+
+  setError(null);
+  setLoading(true);
+
+  try {
+    if (isRegistering) {
+      console.log("2 - Antes de register");
+
+      await register(formData);
+
+      console.log("3 - Después de register");
+
+      await login({
+        email: formData.email,
+        password: formData.password
+      });
+
+      console.log("4 - Después de login");
+
+    } else {
+      console.log("2 - Antes de login");
+
+      await login({
+        email: formData.email,
+        password: formData.password
+      });
+
+      console.log("3 - Después de login");
     }
-  };
+
+    onConfirm();
+    navigate("/");
+
+  } catch (err) {
+    console.error("ERROR:", err);
+
+  } finally {
+    console.log("FINALLY");
+
+    setLoading(false);
+  }
+};
 
   // Formulario
   return (
@@ -67,7 +123,7 @@ const ModalUsuario = ({ onConfirm, onClose }) => {
             required
             type="text"
             value={formData.username}
-            placeholder={t('modal.userPlaceholder')}
+            placeholder={t('User')}
             className="w-full mb-4 p-3 border rounded-xl"
             onChange={(e) => setFormData({...formData, username: e.target.value})}
           />
