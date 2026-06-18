@@ -58,9 +58,12 @@
         "votos": "votos"
     },
     "modal": {
-        "titulo": "Ingresa tu nombre",
-        "placeholder": "Tu nombre...",
-        "boton": "Ingresar"
+        "tituloLogin": "Iniciar sesión",
+        "tituloRegistro": "Crear cuenta",
+        "botonLogin": "Ingresar",
+        "botonRegistro": "Registrarme",
+        "cargando": "Cargando...",
+        "placeholder": "Tu nombre..."
     },
     "tarjeta": {
         "ver_mas": "Ver más",
