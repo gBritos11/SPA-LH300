@@ -1,4 +1,3 @@
-// Importaciones
 import { useFavoritos } from "../context/entornoFavoritos";
 import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp";
@@ -11,22 +10,24 @@ const Favoritos = () => {
   const { favoritos } = useFavoritos();
   const { t } = useTranslation();
 
-  // Inicializo estados
   const [filtro, setFiltro] = useState('');
   const [campoFiltro, setCampoFiltro] = useState('search');
 
-  // Accedo a favoritos
+  // Procesamiento y filtrado de favoritos alineado al Schema de Prisma
   const filtrados = favoritos.filter((fav) => {
-    const destino = fav.destination;
+    const destino = fav.destination; // Corresponde al modelo 'Destination' mapeado por Prisma
     if (!destino) return false;
 
     const criterio = filtro.toLowerCase();
     if (!filtro) return true;
     
     switch (campoFiltro) {
-      case 'pais': return destino.country?.toLowerCase().includes(criterio);
-      case 'ubicacion': return destino.location?.toLowerCase().includes(criterio);
-      case 'descripcion': return destino.description?.toLowerCase().includes(criterio);
+      case 'country': 
+        return destino.country?.toLowerCase().includes(criterio);
+      case 'location': 
+        return destino.location?.toLowerCase().includes(criterio);
+      case 'description': 
+        return destino.description?.toLowerCase().includes(criterio);
       default:
         return (
           destino.name?.toLowerCase().includes(criterio) ||

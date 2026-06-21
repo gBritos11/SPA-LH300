@@ -48,14 +48,14 @@ const Ranking = () => {
                             {/* IMAGEN */}
                             <img
                                 src={destino.images?.[0]?.url || 'https://picsum.photos/40/40'}
-                                alt={destino.nombre}
+                                alt={destino.name}
                                 className="w-9 h-9 object-cover rounded-lg shrink-0"
                             />
 
                             {/* INFO */}
                             <div className="flex-1 min-w-0">
                                 <p className="text-xs font-semibold text-gray-800 truncate group-hover:text-orange-600 transition-colors">
-                                    {destino.nombre}
+                                    {destino.name}
                                 </p>
                                 <div className="flex items-center gap-1 mt-0.5">
                                     <Star size={10} className="text-orange-400 fill-current" />
