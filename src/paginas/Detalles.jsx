@@ -151,9 +151,9 @@ const Detalles = () => {
             {/* BOTÓN DE FAVORITOS INTEGRADO */}
             <button 
                 type="button"
-                disabled={actualizandoFavorito}
+                disabled={cargando}
                 onClick={() => toggleFavorito(datosDestino)}
-                className={`p-3 rounded-full transition-colors ${actualizandoFavorito ? 'cursor-not-allowed opacity-70' : 'hover:bg-gray-100 cursor-pointer'}`}
+                className={`p-3 rounded-full transition-colors ${cargando ? 'cursor-not-allowed opacity-70' : 'hover:bg-gray-100 cursor-pointer'}`}
             >
                 <Heart 
                     className={isFav ? "fill-orange-500 text-orange-500" : "text-gray-400"} 

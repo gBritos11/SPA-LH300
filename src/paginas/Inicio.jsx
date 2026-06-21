@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import useDestinos from '../hooks/useDestinos';
 import useScrollInfinito from '../hooks/useScrollInfinito';
 import Tarjeta from './../componentes/Tarjeta/Tarjeta';
@@ -12,22 +12,26 @@ import BannerCarrusel from "../componentes/BannerCarrusel/BannerCarrusel";
 
 const NOMBRES_CAMPO = {
     search: 'todos los campos',
-    pais: 'País',
-    ubicacion: 'Ubicación',
-    descripcion: 'Descripción'
+    country: 'país',
+    location: 'ubicación',
+    description: 'descripción'
 };
 
 const Inicio = () => {
     const [filtro, setFiltro] = useState('');
     const [campoFiltro, setCampoFiltro] = useState('search');
+    
+    // Consumo directo y limpio hacia el Hook (usa los valores nativos en inglés)
     const { destinos, loading, cargandoMas, error, setPagina, tieneMas } = useDestinos(filtro, campoFiltro);
+    
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const imagenesBanner = [
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070",
-    "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070",
-    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070"
-  ];
+
+    const imagenesBanner = useMemo(() => [
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070",
+        "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070"
+    ], []);
 
     const cargarMas = useCallback(() => {
         setPagina(prev => prev + 1);
@@ -70,8 +74,8 @@ const Inicio = () => {
                 {/* BUSCADOR */}
                 <div className="mb-10 flex justify-center">
                     <Busqueda
-                        valor={filtro}
-                        onChange={setFiltro}
+                        valor={filtro} 
+                        onChange={setFiltro} 
                         campoFiltro={campoFiltro}
                         onCampoChange={setCampoFiltro}
                     />

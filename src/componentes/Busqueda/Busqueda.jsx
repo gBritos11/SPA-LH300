@@ -7,7 +7,7 @@ const Busqueda = ({ valor, onChange, campoFiltro, onCampoChange }) => {
   return (
     <div className="flex flex-col sm:flex-row gap-2 w-full max-w-2xl">
 
-      {/* INPUT */}
+      {/* INPUT DE TEXTO */}
       <div className="relative flex-1">
         <Search
           size={16}
@@ -35,7 +35,7 @@ const Busqueda = ({ valor, onChange, campoFiltro, onCampoChange }) => {
         )}
       </div>
 
-      {/* SELECT */}
+      {/* SELECTOR DE CRITERIO DE FILTRADO */}
       <div className="relative">
         <select
           value={campoFiltro}
@@ -48,10 +48,11 @@ const Busqueda = ({ valor, onChange, campoFiltro, onCampoChange }) => {
                      focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100
                      transition-all duration-200"
         >
+          {/* Valores técnicos nativos alineados con el Schema de Prisma */}
           <option value="search">{t('buscador.filtro_todos')}</option>
-          <option value="pais">{t('buscador.filtro_pais')}</option>
-          <option value="ubicacion">{t('buscador.filtro_ubicacion')}</option>
-          <option value="descripcion">{t('buscador.filtro_descripcion')}</option>
+          <option value="country">{t('buscador.filtro_pais')}</option>
+          <option value="location">{t('buscador.filtro_ubicacion')}</option>
+          <option value="description">{t('buscador.filtro_descripcion')}</option>
         </select>
 
         {/* FLECHA CUSTOM */}
