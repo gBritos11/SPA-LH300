@@ -3,18 +3,20 @@ import { useFavoritos } from "../../context/entornoFavoritos";
 import { useTranslation } from 'react-i18next';
 
 const Favorito = ({ destino, className = "" }) => {
-  const { esFavorito, toggleFavorito } = useFavoritos(); 
+  const { esFavorito, toggleFavorito, actualizandoFavorito } = useFavoritos(); 
   const { t } = useTranslation();
 
   const favorito = esFavorito(destino.id);
 
   return (
     <button
+      type="button"
+      disabled={actualizandoFavorito}
       onClick={(e) => {
         e.stopPropagation(); 
         toggleFavorito(destino); 
       }}
-      className={`flex items-center gap-2 ${className}`}
+      className={`flex items-center gap-2 ${className} ${actualizandoFavorito ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}
     >
       <span
         className={`p-2 rounded-full transition-colors ${

@@ -58,9 +58,12 @@
         "votos": "votes"
     },
     "modal": {
-        "titulo": "Enter your name",
-        "placeholder": "Your name...",
-        "boton": "Enter"
+        "tituloLogin": "Log in",
+        "tituloRegistro": "Create account",
+        "botonLogin": "Sign in",
+        "botonRegistro": "Sign up",
+        "cargando": "Loading...",
+        "placeholder": "Your name..."
     },
     "tarjeta": {
         "ver_mas": "See more",

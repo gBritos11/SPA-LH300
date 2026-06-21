@@ -77,9 +77,9 @@ const Detalles = () => {
         );
 
         const destinoActualizado =
-            res?.data?.destination;
+            res?.data?.destination ?? res?.destination ?? res;
 
-        if (!destinoActualizado) {
+        if (!destinoActualizado || typeof destinoActualizado !== 'object') {
             throw new Error("Respuesta inválida");
         }
 
@@ -150,8 +150,10 @@ const Detalles = () => {
             
             {/* BOTÓN DE FAVORITOS INTEGRADO */}
             <button 
+                type="button"
+                disabled={actualizandoFavorito}
                 onClick={() => toggleFavorito(datosDestino)}
-                className="p-3 rounded-full hover:bg-gray-100 transition-colors"
+                className={`p-3 rounded-full transition-colors ${actualizandoFavorito ? 'cursor-not-allowed opacity-70' : 'hover:bg-gray-100 cursor-pointer'}`}
             >
                 <Heart 
                     className={isFav ? "fill-orange-500 text-orange-500" : "text-gray-400"} 

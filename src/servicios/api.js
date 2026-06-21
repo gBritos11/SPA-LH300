@@ -24,7 +24,7 @@ apiClient.interceptors.response.use(
             originalRequest._retry = true;
             
             try {
-                const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/refresh`, {}, { withCredentials: true });
+                const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/refresh`, {}, { withCredentials: true });
 
                 // Guardamos el nuevo token
                 sessionStorage.setItem('accessToken', data.accessToken);
