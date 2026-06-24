@@ -1,20 +1,16 @@
-// Realizo las importaciones
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useCallback } from "react";
 import apiClient from "../servicios/api";
 import { UsuarioContext } from "./UsuarioContext";
 import toast from 'react-hot-toast';
 
-// Creo contexto react
 export const FavoritosContext = createContext();
 
 export const FavoritosProvider = ({ children }) => {
-  // Inicializo estados
   const [favoritos, setFavoritos] = useState([]);
   const [cargando, setCargando] = useState(false);
   const { usuario } = useContext(UsuarioContext);
 
-  // Definino la función de carga de favoritos
-  const fetchFavoritos = async () => {
+  const fetchFavoritos = useCallback(async () => {
     if (!usuario) {
       setFavoritos([]);
       return;
@@ -25,15 +21,18 @@ export const FavoritosProvider = ({ children }) => {
       const { data } = await apiClient.get("/favorites");
       setFavoritos(data);
     } catch (error) {
-      toast.error("Error al cargar favoritos:", error);
+      // Silenciamos el error si es un 401 porque el interceptor ya lo gestiona
+      if (error.response?.status !== 401) {
+        toast.error("Error al cargar favoritos");
+      }
     } finally {
       setCargando(false);
     }
-  };
+  }, [usuario]);
 
   useEffect(() => {
     fetchFavoritos();
-  }, [usuario]); 
+  }, [fetchFavoritos]); 
 
   const esFavorito = (id) => favoritos.some((fav) => fav.destinationId === id);
 
@@ -41,22 +40,34 @@ export const FavoritosProvider = ({ children }) => {
     if (!usuario) return;
 
     const yaEsFavorito = esFavorito(destino.id);
+    
+    // Guardamos estado previo para rollback
+    const favoritosPrevios = [...favoritos];
 
+    if (yaEsFavorito) {
+      setFavoritos(favoritos.filter(fav => fav.destinationId !== destino.id));
+    } else {
+      setFavoritos([...favoritos, { destinationId: destino.id, destination: destino }]);
+    }
+
+    // Petición al servidor
     try {
       if (yaEsFavorito) {
         await apiClient.delete(`/favorites/${destino.id}`);
-        await fetchFavoritos();
       } else {
         await apiClient.post("/favorites", { destinationId: destino.id });
-        await fetchFavoritos();
       }
+      // Refrescamos para confirmar que el servidor tiene lo mismo que nosotros
+      await fetchFavoritos();
     } catch (error) {
-      toast.error("No se pudo actualizar favoritos. Intenta de nuevo.");
+      // Revertir si falla
+      setFavoritos(favoritosPrevios);
+      toast.error("Error al actualizar favoritos");
     }
   };
 
   return (
-    <FavoritosContext.Provider value={{ favoritos, esFavorito, toggleFavorito, cargando }}>
+    <FavoritosContext.Provider value={{ favoritos, esFavorito, toggleFavorito, cargando, fetchFavoritos }}>
       {children}
     </FavoritosContext.Provider>
   );
@@ -64,8 +75,6 @@ export const FavoritosProvider = ({ children }) => {
 
 export const useFavoritos = () => {
   const context = useContext(FavoritosContext);
-  if (!context) {
-    throw new Error("useFavoritos debe ser usado dentro de un FavoritosProvider");
-  }
+  if (!context) throw new Error("useFavoritos debe ser usado dentro de un Provider");
   return context;
 };

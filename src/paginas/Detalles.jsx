@@ -4,10 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import useDestinoId from '../hooks/useDestinoId';
 import MensajesApp from "./../componentes/MensajesApp/MensajesApp"
 import Boton from "../componentes/Boton/Boton";
+import CarruselDestino from "../componentes/CarruselDestino/CarruselDestino";
 import { generarPDF } from '../servicios/pdfService';
 import SelectorEstrellas from "../componentes/SelectorEstrellas/SelectorEstrellas";
 import { votarDestino } from "../servicios/votacionService";
-import { ArrowLeft, MapPin, Heart } from "lucide-react"; // Importamos Heart
+import { ArrowLeft, MapPin, Heart, Download } from "lucide-react"; // Importamos Heart
 import { useTranslation } from 'react-i18next';
 import { useFavoritos } from '../context/entornoFavoritos'; // IMPORTACIÓN CORREGIDA
 import { toast } from "react-toastify";
@@ -130,36 +131,55 @@ const Detalles = () => {
       </button>
 
       <div className="flex flex-col lg:flex-row gap-10">
+        
+        {/* COLUMNA IZQUIERDA: CARRUSEL E IMÁGENES */}
         <div className="lg:w-1/2">
           <div className="relative rounded-2xl overflow-hidden shadow-md">
-              <img 
-                src={data.images?.[0]?.url || 'https://picsum.photos/400/300'}
-                alt={data.name} 
-                className="w-full h-[420px] object-cover"
-              />
-            <div className="absolute bottom-4 left-4 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white text-sm px-3 py-1.5 rounded-full">
+            
+            <CarruselDestino imagenes={data.images || []} altText={data.name} />
+            
+            <div className="absolute bottom-4 left-4 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white text-sm px-3 py-1.5 rounded-full z-20 pointer-events-none">
               <MapPin size={14} />
               <span>{data.location}, {data.country}</span>
             </div>
           </div>
         </div>
 
+        {/* COLUMNA DERECHA: TEXTOS Y ACCIONES */}
         <div className="lg:w-1/2 flex flex-col gap-6">
-          <div className="flex justify-between items-start">
-            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{data.name}</h1>
+          <div className="flex justify-between items-start gap-4">
+            <h1 className="text-4xl font-bold text-gray-900 tracking-tight flex-1">{data.name}</h1>
             
-            {/* BOTÓN DE FAVORITOS INTEGRADO */}
-            <button 
-                type="button"
-                disabled={actualizandoFavorito}
-                onClick={() => toggleFavorito(datosDestino)}
-                className={`p-3 rounded-full transition-colors ${actualizandoFavorito ? 'cursor-not-allowed opacity-70' : 'hover:bg-gray-100 cursor-pointer'}`}
-            >
-                <Heart 
-                    className={isFav ? "fill-orange-500 text-orange-500" : "text-gray-400"} 
+            {/* CONTENEDOR DE ACCIONES (PDF + FAVORITOS) */}
+            <div className="flex items-center gap-1">
+                
+                {/* BOTÓN DESCARGAR PDF */}
+                <button 
+                  type="button"
+                  disabled={generando}
+                  onClick={handleDescargarPDF}
+                  title={t('detalles.descargar_pdf') || "Descargar PDF"}
+                  className={`p-3 rounded-full transition-colors ${generando ? 'cursor-not-allowed opacity-50 bg-gray-50' : 'hover:bg-gray-100 cursor-pointer text-gray-400 hover:text-orange-500'}`}
+                >
+                  <Download 
                     size={28} 
-                />
-            </button>
+                    className={generando ? "animate-pulse text-orange-400" : ""} 
+                  />
+                </button>
+
+                {/* BOTÓN DE FAVORITOS */}
+                <button 
+                    type="button"
+                    disabled={cargando}
+                    onClick={() => toggleFavorito(datosDestino)}
+                    className={`p-3 rounded-full transition-colors ${cargando ? 'cursor-not-allowed opacity-70' : 'hover:bg-gray-100 cursor-pointer'}`}
+                >
+                    <Heart 
+                        className={isFav ? "fill-orange-500 text-orange-500" : "text-gray-400"} 
+                        size={28} 
+                    />
+                </button>
+            </div>
           </div>
 
           <p className="text-gray-500 leading-relaxed">{data.description}</p>

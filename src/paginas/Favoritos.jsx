@@ -1,32 +1,40 @@
-// Importaciones
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFavoritos } from "../context/entornoFavoritos";
 import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp";
-import { useState } from 'react';
 import Busqueda from '../componentes/Busqueda/Busqueda';
 import { useTranslation } from 'react-i18next';
 import { Heart } from 'lucide-react';
 
 const Favoritos = () => {
-  const { favoritos } = useFavoritos();
+  // Extraemos fetchFavoritos del contexto para asegurar datos frescos
+  const { favoritos, fetchFavoritos } = useFavoritos();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
-  // Inicializo estados
   const [filtro, setFiltro] = useState('');
   const [campoFiltro, setCampoFiltro] = useState('search');
 
-  // Accedo a favoritos
+  useEffect(() => {
+    fetchFavoritos();
+  }, [fetchFavoritos]);
+
+  // Procesamiento y filtrado de favoritos alineado al Schema de Prisma
   const filtrados = favoritos.filter((fav) => {
-    const destino = fav.destination;
+    const destino = fav.destination; 
     if (!destino) return false;
 
     const criterio = filtro.toLowerCase();
     if (!filtro) return true;
     
     switch (campoFiltro) {
-      case 'pais': return destino.country?.toLowerCase().includes(criterio);
-      case 'ubicacion': return destino.location?.toLowerCase().includes(criterio);
-      case 'descripcion': return destino.description?.toLowerCase().includes(criterio);
+      case 'country': 
+        return destino.country?.toLowerCase().includes(criterio);
+      case 'location': 
+        return destino.location?.toLowerCase().includes(criterio);
+      case 'description': 
+        return destino.description?.toLowerCase().includes(criterio);
       default:
         return (
           destino.name?.toLowerCase().includes(criterio) ||
@@ -76,7 +84,7 @@ const Favoritos = () => {
                     <Tarjeta
                         key={fav.destinationId}
                         destino={fav.destination}
-                        action={() => window.location.href = `/destino/${fav.destinationId}`}
+                        action={() => navigate(`/destino/${fav.destinationId}`)}
                     />
                 ))}
             </div>
