@@ -6,14 +6,12 @@ const apiClient = axios.create({
     headers: { 'Content-Type': 'application/json' }
 });
 
-// Interceptor para inyectar token
 apiClient.interceptors.request.use((config) => {
     const token = sessionStorage.getItem('accessToken');
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
 });
 
-// Interceptor para el REFRESH TOKEN AUTOMÁTICO
 apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -24,18 +22,22 @@ apiClient.interceptors.response.use(
             originalRequest._retry = true;
             
             try {
-                const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/refresh`, {}, { withCredentials: true });
+                // Usamos apiClient para el refresh para mantener consistencia
+                const { data } = await apiClient.post("/auth/refresh");
 
-                // Guardamos el nuevo token
                 sessionStorage.setItem('accessToken', data.accessToken);
-
-                // Reintentamos la petición original
-                return apiClient(originalRequest);
                 
+                // IMPORTANTE: Actualizar el header de la petición original antes de reintentar
+                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+                
+                return apiClient(originalRequest);
             } catch (refreshError) {
-                // Si el refresco falla, el Refresh Token también expiró.
-                // Limpiamos todo y recargamos para forzar el logout.
+                // LIMPIEZA
                 sessionStorage.removeItem('accessToken');
+                
+                if (window.location.pathname !== '/login') {
+                    window.location.href = '/login'; 
+                }
                 return Promise.reject(refreshError);
             }
         }

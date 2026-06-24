@@ -14,6 +14,7 @@ const Busqueda = ({ valor, onChange, campoFiltro, onCampoChange }) => {
           className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400"
         />
         <input
+          aria-label={t('buscador.placeholder')}
           type="text"
           placeholder={t('buscador.placeholder')}
           value={valor}

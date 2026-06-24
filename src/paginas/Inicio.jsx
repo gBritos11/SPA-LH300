@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import useDestinos from '../hooks/useDestinos';
 import useScrollInfinito from '../hooks/useScrollInfinito';
 import Tarjeta from './../componentes/Tarjeta/Tarjeta';
+import TarjetaSkeleton from '../componentes/TarjetaSkeleton.jsx/TarjetaSkeleton';
 import { useNavigate } from "react-router-dom";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp";
 import Boton from '../componentes/Boton/Boton';
@@ -21,7 +22,6 @@ const Inicio = () => {
     const [filtro, setFiltro] = useState('');
     const [campoFiltro, setCampoFiltro] = useState('search');
     
-    // Consumo directo y limpio hacia el Hook (usa los valores nativos en inglés)
     const { destinos, loading, cargandoMas, error, setPagina, tieneMas } = useDestinos(filtro, campoFiltro);
     
     const navigate = useNavigate();
@@ -39,8 +39,18 @@ const Inicio = () => {
 
     const refObservador = useScrollInfinito(cargarMas, tieneMas && !loading && !cargandoMas);
 
+    // Estado de carga inicial con Skeletons
     if (loading && destinos.length === 0 && !filtro) {
-        return <MensajesApp tipo="cargando" />;
+        return (
+            <div className="w-full">
+                <BannerCarrusel imagenes={imagenesBanner} />
+                <div className="max-w-7xl mx-auto px-6 py-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        {[...Array(6)].map((_, i) => <TarjetaSkeleton key={i} />)}
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     if (error) return (
@@ -84,9 +94,8 @@ const Inicio = () => {
                 {/* CONTENIDO */}
                 <div className="flex flex-col lg:flex-row gap-10 items-start">
 
-                    {/* GRILLA */}
-                    <div className="flex-1">
-                        {destinos.length === 0 && !loading && !cargandoMas ? (
+                    <div className="flex-1 transition-opacity duration-300">
+                        {destinos.length === 0 && !loading ? (
                             <MensajesApp tipo="vacio" mensaje={mensajeVacio} />
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -97,6 +106,10 @@ const Inicio = () => {
                                         action={() => navigate(`/destino/${destino.id}`)}
                                     />
                                 ))}
+                                {/* Skeletons adicionales durante carga de más resultados */}
+                                {loading && destinos.length > 0 && 
+                                    [...Array(3)].map((_, i) => <TarjetaSkeleton key={`skel-${i}`} />)
+                                }
                             </div>
                         )}
 

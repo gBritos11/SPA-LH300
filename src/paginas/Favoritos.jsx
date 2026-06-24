@@ -1,21 +1,28 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFavoritos } from "../context/entornoFavoritos";
 import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp";
-import { useState } from 'react';
 import Busqueda from '../componentes/Busqueda/Busqueda';
 import { useTranslation } from 'react-i18next';
 import { Heart } from 'lucide-react';
 
 const Favoritos = () => {
-  const { favoritos } = useFavoritos();
+  // Extraemos fetchFavoritos del contexto para asegurar datos frescos
+  const { favoritos, fetchFavoritos } = useFavoritos();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const [filtro, setFiltro] = useState('');
   const [campoFiltro, setCampoFiltro] = useState('search');
 
+  useEffect(() => {
+    fetchFavoritos();
+  }, [fetchFavoritos]);
+
   // Procesamiento y filtrado de favoritos alineado al Schema de Prisma
   const filtrados = favoritos.filter((fav) => {
-    const destino = fav.destination; // Corresponde al modelo 'Destination' mapeado por Prisma
+    const destino = fav.destination; 
     if (!destino) return false;
 
     const criterio = filtro.toLowerCase();
@@ -77,7 +84,7 @@ const Favoritos = () => {
                     <Tarjeta
                         key={fav.destinationId}
                         destino={fav.destination}
-                        action={() => window.location.href = `/destino/${fav.destinationId}`}
+                        action={() => navigate(`/destino/${fav.destinationId}`)}
                     />
                 ))}
             </div>
