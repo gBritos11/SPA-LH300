@@ -10,15 +10,19 @@ const Tarjeta = memo(({ destino, action, tipo = "destino" }) => {
   
   if (!destino) return null;
 
-  const { 
-    images,
-    name: nombre = 'Sin nombre',
-    description: descripcion = 'Sin descripción disponible',
-    budget: presupuesto = 0,
-    country: pais = 'desconocido'
-  } = destino;
+  const trad = destino.translations?.[0] || {};
 
-  const imagen = images?.[0]?.url || 'https://picsum.photos/400/300';
+  const { images, budget: presupuesto = 0 } = destino;
+
+  const nombre = trad.name || 'Sin nombre';
+  const descripcion = trad.description || 'Sin descripción disponible';
+  const pais = trad.country || 'desconocido';
+
+  const imagen = images?.[0]?.url;
+
+const urlImagenFinal = imagen && imagen.startsWith('http') 
+  ? imagen 
+  : 'https://picsum.photos/400/300';
 
   const cardClasses = tipo === "destino"
     ? "bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden flex flex-col transition-all duration-300"
@@ -37,7 +41,7 @@ const Tarjeta = memo(({ destino, action, tipo = "destino" }) => {
           <div className="relative overflow-hidden">
             <Favorito destino={destino} className="absolute top-3 right-3 z-10" />
             <img 
-              src={imagen} 
+              src={urlImagenFinal} 
               alt={nombre} 
               loading="lazy" 
               className="w-full h-52 object-cover hover:scale-105 transition-transform duration-500"

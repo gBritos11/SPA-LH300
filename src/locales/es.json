@@ -3,7 +3,8 @@
         "inicio": "Inicio",
         "favoritos": "Favoritos",
         "idioma": "Idioma",
-        "hola": "Hola"
+        "hola": "Hola",
+        "añadir_destino": "Añadir destino"
     },
     "banner": {
         "titulo": "Explorá el Mundo",
@@ -41,6 +42,7 @@
     "descargar": "Descargar ficha",
     "descarga_exitosa": "Ficha descargada correctamente",
     "accesibilidad": "Accesibilidad",
+    "transporte": "transporte",
     "alojamientos": "Alojamientos",
     "volver": "Volver al inicio",
     "reintentar": "Reintentar",
