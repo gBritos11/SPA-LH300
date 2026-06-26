@@ -3,7 +3,8 @@
         "inicio": "Home",
         "favoritos": "My Favorites",
         "idioma": "Language",
-        "hola": "Hello"
+        "hola": "Hello",
+        "añadir_destino": "Add destination"
     },
     "banner": {
         "titulo": "Explore the World",
@@ -41,6 +42,7 @@
     "descargar": "Download info",
     "descarga_exitosa": "Info sheet downloaded successfully",
     "accesibilidad": "Accessibility",
+    "transporte": "transportation",
     "alojamientos": "Accommodations",
     "volver": "Back to home",
     "reintentar": "Retry",
