@@ -1,41 +1,52 @@
+import { useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFavoritos } from "../context/entornoFavoritos";
 import Tarjeta from "../componentes/Tarjeta/Tarjeta";
 import MensajesApp from "../componentes/MensajesApp/MensajesApp";
-import { useState } from 'react';
 import Busqueda from '../componentes/Busqueda/Busqueda';
 import { useTranslation } from 'react-i18next';
 import { Heart } from 'lucide-react';
 
 const Favoritos = () => {
-  const { favoritos } = useFavoritos();
-  const { t } = useTranslation();
+  // Extraemos fetchFavoritos del contexto para asegurar datos frescos
+  const { favoritos, fetchFavoritos } = useFavoritos();
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const [filtro, setFiltro] = useState('');
   const [campoFiltro, setCampoFiltro] = useState('search');
 
-  // Procesamiento y filtrado de favoritos alineado al Schema de Prisma
-  const filtrados = favoritos.filter((fav) => {
-    const destino = fav.destination; // Corresponde al modelo 'Destination' mapeado por Prisma
-    if (!destino) return false;
+  useEffect(() => {
+    fetchFavoritos();
+  }, [fetchFavoritos]);
 
-    const criterio = filtro.toLowerCase();
-    if (!filtro) return true;
-    
-    switch (campoFiltro) {
-      case 'country': 
-        return destino.country?.toLowerCase().includes(criterio);
-      case 'location': 
-        return destino.location?.toLowerCase().includes(criterio);
-      case 'description': 
-        return destino.description?.toLowerCase().includes(criterio);
-      default:
-        return (
-          destino.name?.toLowerCase().includes(criterio) ||
-          destino.country?.toLowerCase().includes(criterio) ||
-          destino.description?.toLowerCase().includes(criterio)
-        );
-    }
-  });
+  // Procesamiento y filtrado de favoritos alineado al Schema de Prisma
+    const filtrados = useMemo(() => {
+        return favoritos.filter((fav) => {
+            const destino = fav.destination;
+            if (!destino) return false;
+
+            // Si no vienen traducciones, creamos un objeto vacío pero seguro
+            const traducciones = destino.translations || [];
+            const trad = traducciones.find(tr => tr.language === i18n.language) || traducciones[0] || {};
+            
+            const criterio = filtro.toLowerCase();
+            if (!filtro) return true;
+            
+            // Mapeo seguro: buscamos en la traducción o en el destino base
+            const nombre = (trad.name || destino.name || '').toLowerCase();
+            const pais = (trad.country || destino.country || '').toLowerCase();
+            const descripcion = (trad.description || destino.description || '').toLowerCase();
+
+            switch (campoFiltro) {
+                case 'country': return pais.includes(criterio);
+                case 'location': return (trad.location || '').toLowerCase().includes(criterio);
+                case 'description': return descripcion.includes(criterio);
+                default:
+                    return nombre.includes(criterio) || pais.includes(criterio) || descripcion.includes(criterio);
+            }
+        });
+    }, [favoritos, filtro, campoFiltro, i18n.language]);
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
@@ -77,7 +88,7 @@ const Favoritos = () => {
                     <Tarjeta
                         key={fav.destinationId}
                         destino={fav.destination}
-                        action={() => window.location.href = `/destino/${fav.destinationId}`}
+                        action={() => navigate(`/destino/${fav.destinationId}`)}
                     />
                 ))}
             </div>

@@ -8,20 +8,23 @@ const CAMPO_API = {
 };
 
 export const getDestinos = async (busqueda = '', pagina = 1, limite = 9, campo = 'search', lang = 'es') => {
-    const campoQuery = CAMPO_API[campo] || campo;
-    let consulta = `?page=${pagina}&limit=${limite}&lang=${lang}`;
-    if (busqueda) {
-        consulta += `&${campoQuery}=${encodeURIComponent(busqueda)}`;
+    try {
+        const campoQuery = CAMPO_API[campo] || campo;
+        const consulta = new URLSearchParams({
+            page: pagina,
+            limit: limite,
+            lang: lang,
+            ...(busqueda && { [campoQuery]: busqueda })
+        });
+
+        const { data } = await apiClient.get(`/destinos?${consulta.toString()}`);
+
+        const results = data.data ?? data.destinos ?? data.results ?? (Array.isArray(data) ? data : []);
+        return results;
+    } catch (error) {
+        console.error("Error en getDestinos:", error);
+        throw error; // Lanzamos error para que el hook lo maneje
     }
-
-    const { data } = await apiClient.get(`/destinos${consulta}`);
-
-    if (Array.isArray(data)) return data;
-    if (Array.isArray(data.data)) return data.data;
-    if (Array.isArray(data.destinos)) return data.destinos;
-    if (Array.isArray(data.results)) return data.results;
-
-    return [];
 }
 
 export const getDestinoById = async (id, lang = 'es') => {

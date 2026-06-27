@@ -22,10 +22,10 @@ const useDestinos = (filtro = '', campoFiltro = 'search') => {
     useEffect(() => {
         const fetchDestinos = async () => {
             try {
-                // Solo mostramos el spinner principal si es la primera página
+                // Si es página 1, marcamos loading, pero no limpiamos destinos inmediatamente 
+                // para evitar el salto de altura.
                 if (pagina === 1) {
                     setLoading(true);
-                    setDestinos([]); // Limpiamos para la nueva búsqueda
                 } else {
                     setCargandoMas(true);
                 }
@@ -33,6 +33,8 @@ const useDestinos = (filtro = '', campoFiltro = 'search') => {
                 const datos = await getDestinos(filtro, pagina, LIMIT, campoFiltro, i18n.language);
                 
                 setTieneMas(datos.length >= LIMIT);
+                
+                // Si es página 1, reemplazamos. Si no, concatenamos.
                 setDestinos(prev => (pagina === 1 ? datos : [...prev, ...datos]));
                 setError(null);
             } catch (err) {
@@ -49,7 +51,6 @@ const useDestinos = (filtro = '', campoFiltro = 'search') => {
         }, delay);
 
         return () => clearTimeout(timer);
-
     }, [filtro, pagina, campoFiltro, i18n.language]);
 
     return { destinos, loading, cargandoMas, error, pagina, setPagina, tieneMas };

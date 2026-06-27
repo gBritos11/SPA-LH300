@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import { Link } from "react-router-dom";
 
-const Boton = ({ 
+const Boton = memo (({ 
   children,
   to,
   onClick,
@@ -56,6 +57,7 @@ const Boton = ({
       {contenido}
     </button>
   );
-};
+});
 
+Boton.displayName = "Boton";
 export default Boton;
