@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { getDestinoById } from "../servicios/destino.service.js";
+import { useTranslation } from "react-i18next";
 
 const useDestinoId = (id) => {
+    const { i18n } = useTranslation();
     const [destino, setDestino] = useState(null);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
@@ -12,8 +14,9 @@ const useDestinoId = (id) => {
 
         const fetchDestino = async() => {
             setCargando(true);
+            setError(null);
             try {
-                const datos = await getDestinoById(id);
+                const datos = await getDestinoById(id, i18n.language);
                 if (isMounted) setDestino(datos);
             } catch (err) {
                 if (isMounted) {
@@ -27,7 +30,7 @@ const useDestinoId = (id) => {
 
         fetchDestino();
         return () => { isMounted = false; }; // Limpieza
-    }, [id]);
+    }, [id, i18n.language]);
 
     return { destino, cargando, error };
 }

@@ -2,10 +2,12 @@ import { createContext, useState, useEffect, useContext, useCallback } from "rea
 import apiClient from "../servicios/api";
 import { UsuarioContext } from "./UsuarioContext";
 import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 
 export const FavoritosContext = createContext();
 
 export const FavoritosProvider = ({ children }) => {
+  const {i18n} = useTranslation();
   const [favoritos, setFavoritos] = useState([]);
   const [cargando, setCargando] = useState(false);
   const { usuario } = useContext(UsuarioContext);
@@ -18,7 +20,7 @@ export const FavoritosProvider = ({ children }) => {
     
     setCargando(true);
     try {
-      const { data } = await apiClient.get("/favorites");
+      const { data } = await apiClient.get(`/favorites?lang=${i18n.language}`);
       setFavoritos(data);
     } catch (error) {
       // Silenciamos el error si es un 401 porque el interceptor ya lo gestiona
@@ -28,7 +30,7 @@ export const FavoritosProvider = ({ children }) => {
     } finally {
       setCargando(false);
     }
-  }, [usuario]);
+  }, [usuario, i18n.language]);
 
   useEffect(() => {
     fetchFavoritos();

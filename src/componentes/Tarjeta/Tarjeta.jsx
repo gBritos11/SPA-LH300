@@ -14,9 +14,9 @@ const Tarjeta = memo(({ destino, action, tipo = "destino" }) => {
 
   const { images, budget: presupuesto = 0 } = destino;
 
-  const nombre = trad.name || 'Sin nombre';
-  const descripcion = trad.description || 'Sin descripción disponible';
-  const pais = trad.country || 'desconocido';
+  const nombre = destino.name || trad.name || 'Sin nombre';
+  const descripcion = destino.description || trad.description || 'Sin descripción disponible';
+  const pais = destino.country || trad.country || 'desconocido';
 
   const imagen = images?.[0]?.url;
 
