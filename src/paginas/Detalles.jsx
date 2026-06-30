@@ -44,10 +44,10 @@ const Detalles = () => {
 
   const datosDestino = {
     id: data.id,
-    nombre: trad.name || 'Sin nombre',
-    descripcion: trad.description || 'Sin descripción',
-    ubicacion: trad.location || 'Desconocido',
-    pais: trad.country || 'Desconocido',
+    nombre: data.name || trad.name || 'Sin nombre',
+    descripcion: data.description || trad.description || 'Sin descripción',
+    ubicacion: data.location || trad.location || 'Desconocido',
+    pais: data.country || trad.country || 'Desconocido',
     presupuesto: data.budget,
     calificacion: data.rating || 0,
     cantidadVotos: data.votesCount || 0,
